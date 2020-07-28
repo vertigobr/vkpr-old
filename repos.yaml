@@ -1,0 +1,7 @@
+repositories:
+  - name: vkpr
+    type: helm
+    url: https://vertigobr.github.io/vkpr
+    maintainers:
+      - name: Vertigo
+        email: devops@vertigo.com.br

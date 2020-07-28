@@ -1,0 +1,8 @@
+
+server:
+  ha:
+    enabled: true
+    replicas: 3
+    raft:
+      enable: true
+

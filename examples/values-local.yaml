@@ -1,0 +1,180 @@
+#
+# Valores para testes com o k3d.
+# Note que o stack ingress foi desabilitado, pois o k3d já embute um Traefik.
+#
+# helm upgrade -i -f values-k3d.yaml vkpr ./vkpr
+#
+# Coloque as seguintes entradas no /etc/hosts :
+# 127.0.0.1    whoami.localdomain grafana.localdomain graylog.localdomain
+#
+# Alguns charts são antigos e falham no k8s >= 1.16. Corrija com:
+# helm plugin install https://github.com/ContainerSolutions/helm-convert 
+#
+
+#
+# INGRESS STACK
+#
+nginx-ingress:
+  enabled: true
+  controller:
+    service:
+      type: NodePort
+      nodePorts:
+        http: 32080
+
+external-dns:
+  enabled: false
+cert-manager:
+  enabled: false
+
+# chart values
+ingress:
+  enabled: true
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+  hosts:
+  - host: whoami.localdomain
+    paths: ["/"]
+
+#
+# LOGGING STACK:
+# GRAYLOG
+#
+# tags do subchart graylog - SAO TOP LEVEL SEMPRE
+#tags:
+#  install-elasticsearch: false
+#  install-mongodb: false
+#elasticsearch:
+#  enabled: false
+#  volumeClaimTemplate:
+#    storageClassName: "do-block-storage"
+# mongodb do graylog
+#mongodb-replicaset:
+#  enabled: false
+#  replicas: 1
+#graylog:
+#  enabled: false
+#  graylog:
+#    elasticsearch:
+#      hosts: "http://elasticsearch-master:9200"
+#    mongodb:
+#      uri: mongodb://vkpr-mongodb-replicaset-client:27017/databasename?replicaSet=rs0
+#    rootPassword: vert1234vert1234
+#    input:
+#      tcp:
+#        service:
+#          type: ClusterIP
+#        ports:
+#          - name: gelf-tcp
+#            port: 12201
+#      udp:
+#        service:
+#          type: ClusterIP
+#        ports:
+#          - name: gelf-udp
+#            port: 12201
+#    ingress:
+#      enabled: true
+#      annotations:
+#        ingress.kubernetes.io/ssl-redirect: "false"
+#      hosts:
+#        - graylog.localdomain
+
+loki-stack:
+  enabled: false
+
+#
+# MONITORING STACK
+#
+prometheus-operator:
+  enabled: true
+  prometheusOperator:
+    createCustomResource: false
+  grafana:
+    image:
+      repository: vertigo/grafana
+      tag: 7.0.0
+    adminPassword: "vertigo"
+    plugins:
+      - grafana-piechart-panel
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      hosts: ["grafana.localdomain"]
+    grafana.ini:
+      server:
+        root_url: "http://grafana.localdomain:32080"
+      auth.generic_oauth:
+        enabled: true
+        scopes: openid profile email
+        client_id: grafana
+        client_secret: "e4e342e4-b191-46fa-bfae-b7d5a8263e35"
+        auth_url: http://keycloak.localdomain:32080/auth/realms/vkpr/protocol/openid-connect/auth
+        token_url: http://keycloak.localdomain:32080/auth/realms/vkpr/protocol/openid-connect/token
+        api_url: http://keycloak.localdomain:32080/auth/realms/vkpr/protocol/openid-connect/userinfo
+        allowed_domains: grafana.localdomain keycloak.localdomain
+        allow_sign_up: true
+
+# SECURITY STACK
+#
+keycloak:
+  enabled: true
+  prometheus:
+    operator:
+      enabled: true
+      serviceMonitor:
+        namespace: vkpr 
+        selector:
+          release: vkpr
+  keycloak:
+    username: keycloak
+    password: admin123
+    extraInitContainers: |
+       - name: extensions
+         image: busybox
+         imagePullPolicy: IfNotPresent
+         command:
+           - sh
+         args:
+           - -c
+           - |
+             echo "Copying extensions..."
+             wget -O /deployments/keycloak-metrics-spi.jar https://github.com/aerogear/keycloak-metrics-spi/releases/download/1.0.1/keycloak-metrics-spi-1.0.1.jar
+         volumeMounts:
+          - name: deployments
+            mountPath: /deployments
+    persistence:
+      dbVendor: h2
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      #   kubernetes.io/tls-acme: "true"
+      hosts:
+        - keycloak.localdomain
+      # tls:
+      #   - hosts:
+      #     - keycloak.localdomain
+      #     secretName: keycloak-vkpr-cert
+    extraVolumes: |
+      - name: keycloak-data
+        persistentVolumeClaim:
+          claimName: keycloak-data-volume
+      - name: vkpr-realm-secret
+        secret:
+          secretName: vkpr-realm-secret
+      - name: deployments
+        emptyDir: {}
+
+    extraVolumeMounts: |
+      - name: keycloak-data
+        mountPath: "/opt/jboss/keycloak/standalone/data"
+        readOnly: false
+      - name: vkpr-realm-secret
+        mountPath: "/realm/"
+        readOnly: true
+      - name: deployments
+        mountPath: /opt/jboss/keycloak/standalone/deployments
+
+    extraArgs: -Dkeycloak.import=/realm/vkpr-realm.json

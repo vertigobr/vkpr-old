@@ -1,0 +1,12 @@
+{
+  "realm": "vkpr",
+  "auth-server-url": "http://keycloak.localdomain:32080/auth/",
+  "ssl-required": "external",
+  "resource": "grafana",
+  "verify-token-audience": true,
+  "credentials": {
+    "secret": "ae2b979b-549b-4905-a7ff-125dbbe48dcc"
+  },
+  "confidential-port": 0,
+  "policy-enforcer": {}
+}

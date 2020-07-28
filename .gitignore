@@ -1,0 +1,31 @@
+# IDE
+.vscode/
+.idea/
+
+# Files
+*.tgz
+*.old
+*.xmind
+
+# Terraform
+test_tf/
+.terraform/
+*.tfstate
+terraform.tfstate.backup
+
+# VKPR
+vkpr/DO-velero-keys
+vkpr/crds/cert-manager.yaml
+vkpr/Chart.lock
+
+# Examples
+examples/velero-aws/notes
+examples/velero-aws/credentials-velero
+examples/nginx-velero-example.yaml
+examples/velero-aws/nginx-velero-example.yaml
+examples/values-aws.yaml
+
+# Others
+ark-plugin-digitalocean/
+velero-policy.json
+kubeconfig
