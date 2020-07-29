@@ -3,7 +3,8 @@ name: Lint and Test Charts
 on: [push]
 
 jobs:
-  lint-test:
+  lint:
+    name: Lint Chart
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -14,7 +15,6 @@ jobs:
 
       - name: Run chart-testing (lint)
         uses: helm/chart-testing-action@v1.0.0-rc.2
-        id: lint
         with:
           command: lint
           config: ct.yaml

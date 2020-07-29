@@ -3,7 +3,7 @@ name: Release Helm chart
 on:
   push:
     branches:
-      - feature/actions
+      - master
 
 jobs:
   chart:
