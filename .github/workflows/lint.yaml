@@ -15,14 +15,11 @@ jobs:
       - name: Fetch history
         run: git fetch --prune --unshallow
 
-      - name: Test
-        run: ls -lhart
-
       - name: Run chart-testing (lint)
         id: lint
         uses: helm/chart-testing-action@v1.0.0-rc.2
         with:
-          command: lint --charts vkpr/
+          command: lint --charts $(pwd -P)/vkpr
 
       # - name: Create kind cluster
       #   uses: helm/kind-action@v1.0.0-rc.1
