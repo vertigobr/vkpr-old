@@ -14,7 +14,7 @@ external-dns:
 
 cert-manager:
   enabled: false
-  installCRDs: true # new default
+  installCRDs: true
 
 graylog:
   enabled: false
@@ -36,9 +36,9 @@ acme:
   - http01:
       ingress:
         class: nginx
-  #- http01:
-  #    ingress:
-  #      class: kong
+  # - http01:
+  #     ingress:
+  #       class: kong
 
 #
 # auto-generated entries below
@@ -122,7 +122,7 @@ velero:
   # Resource requests/limits to specify for the Velero deployment. Optional.
   resources: {}
   # Init containers to add to the Velero deployment's pod spec. At least one plugin provider image is required.
-  initContainers: 
+  initContainers:
     - name: velero-plugin-for-aws
       image: velero/velero-plugin-for-aws:v1.0.0
       imagePullPolicy: IfNotPresent
@@ -185,19 +185,19 @@ velero:
       prefix:
       # Additional provider-specific configuration. See link above
       # for details of required/optional fields for your provider.
-      config: 
+      config:
         region: <REGION>
-      #  s3ForcePathStyle:
-      #  s3Url: 
-      #  kmsKeyId:
-      #  resourceGroup:
-      #  The ID of the subscription containing the storage account, if different from the cluster’s subscription. (Azure only)
-      #  subscriptionId:
-      #  storageAccount:
-      #  publicUrl:
-      #  Name of the GCP service account to use for this backup storage location. Specify the
-      #  service account here if you want to use workload identity instead of providing the key file.(GCP only)
-      #  serviceAccount:
+      # s3ForcePathStyle:
+      # s3Url: 
+      # kmsKeyId:
+      # resourceGroup:
+      # The ID of the subscription containing the storage account, if different from the cluster’s subscription. (Azure only)
+      # subscriptionId:
+      # storageAccount:
+      # publicUrl:
+      # Name of the GCP service account to use for this backup storage location. Specify the
+      # service account here if you want to use workload identity instead of providing the key file.(GCP only)
+      # serviceAccount:
 
     # Parameters for the `default` VolumeSnapshotLocation. See
     # https://velero.io/docs/v1.0.0/api-types/volumesnapshotlocation/
@@ -276,7 +276,7 @@ velero:
     # true and `existingSecret` is empty. This should be the contents
     # of your IAM credentials file.
     secretContents:
-      cloud: | 
+      cloud: |
         [default]
         aws_access_key_id=<ACCESS_KEY_ID>
         aws_secret_access_key=<SECRET_KEY_ID>
