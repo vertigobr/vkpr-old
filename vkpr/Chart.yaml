@@ -3,6 +3,7 @@ name: vkpr
 type: application
 version: 0.7.0
 appVersion: v1.4.0 # containous/whoami
+home: https://github.com/vertigobr/vkpr
 description: VKPR Helm chart (Vertigo Kubernetes Production Runtime)
 keywords:
   - vkpr
