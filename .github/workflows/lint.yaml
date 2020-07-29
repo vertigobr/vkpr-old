@@ -1,9 +1,6 @@
 name: Lint and Test Charts
 
-on:
-  push:
-    branches:
-      - feature/actions
+on: [push]
 
 jobs:
   lint-test:
@@ -21,12 +18,12 @@ jobs:
           command: lint
           config: ct.yaml
 
-      # - name: Create kind cluster
-      #   uses: helm/kind-action@v1.0.0-rc.1
-      #   # Only build a kind cluster if there are chart changes to test.
-      #   if: steps.lint.outputs.changed == 'true'
+      - name: Create kind cluster
+        uses: helm/kind-action@v1.0.0-rc.1
+        # Only build a kind cluster if there are chart changes to test.
+        if: steps.lint.outputs.changed == 'true'
 
-      # - name: Run chart-testing (install)
-      #   uses: helm/chart-testing-action@v1.0.0-rc.2
-      #   with:
-      #     command: install
+      - name: Run chart-testing (install)
+        uses: helm/chart-testing-action@v1.0.0-rc.2
+        with:
+          command: install
