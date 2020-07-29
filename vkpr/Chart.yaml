@@ -2,7 +2,7 @@ apiVersion: v2
 name: vkpr
 type: application
 version: 0.7.0
-appVersion: v1.4.0 # containous/whoami
+appVersion: v1.4.0
 home: https://github.com/vertigobr/vkpr
 description: VKPR Helm chart (Vertigo Kubernetes Production Runtime)
 keywords:
@@ -48,17 +48,17 @@ dependencies:
 #   condition: kibana.enabled
 
 # GRAYLOG STACK
-#- name: elasticsearch
+# - name: elasticsearch
 #  repository: https://helm.elastic.co
 #  version: 6.5.0 # nao pode ser 7 por causa do graylog
   # 6.6.2-alpha1
   # 6.5.0
 #  condition: elasticsearch.enabled
-#- name: graylog
+# - name: graylog
 #  repository: https://kubernetes-charts.storage.googleapis.com
 #  version: 1.6.2
 #  condition: graylog.enabled
-#- name: mongodb-replicaset
+# - name: mongodb-replicaset
 #  repository: https://kubernetes-charts.storage.googleapis.com
 #  version: 3.14.1
 #  condition: mongodb-replicaset.enabled
@@ -103,7 +103,7 @@ dependencies:
     repository: https://helm.releases.hashicorp.com
     version: 0.5.0
     condition: vault.enabled
-    
+
   ### BACKUP STACK ###
   - name: velero
     repository: https://kubernetes-charts.storage.googleapis.com/
