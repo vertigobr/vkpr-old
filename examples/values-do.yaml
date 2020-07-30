@@ -237,9 +237,32 @@ vault:
 
 keycloak:
   enabled: true
+  prometheus:
+    operator:
+      enabled: true
+      serviceMonitor:
+        namespace: "vkpr" 
+        selector:
+          release: "vkpr"
   keycloak:
     username: keycloak
     password: admin123
+    extraInitContainers: |
+       - name: extensions
+         image: busybox
+         imagePullPolicy: IfNotPresent
+         command:
+           - sh
+         args:
+           - -c
+           - |
+             echo "Copying extensions..."
+             wget -O /deployments/keycloak-metrics-spi.jar https://github.com/aerogear/keycloak-metrics-spi/releases/download/1.0.1/keycloak-metrics-spi-1.0.1.jar
+         volumeMounts:
+          - name: deployments
+            mountPath: /deployments
+    persistence:
+      dbVendor: h2
     ingress:
       enabled: true
       annotations:
@@ -258,15 +281,25 @@ keycloak:
       - name: vkpr-realm-secret
         secret:
           secretName: vkpr-realm-secret
+      - name: deployments
+        emptyDir: {}
+
     extraVolumeMounts: |
       - name: keycloak-data
         mountPath: "/opt/jboss/keycloak/standalone/data"
         readOnly: false
       - name: vkpr-realm-secret
-        mountPath: "/realm"
+        mountPath: "/realm/"
         readOnly: true
-    extraArgs: -Dkeycloak.import=/realm/vkpr-realm.json
+      - name: deployments
+        mountPath: /opt/jboss/keycloak/standalone/deployments
 
+    extraEnv: |
+      - name: KEYCLOAK_IMPORT
+        value: /realm/realm-realm-export.json
+      - name: KEYCLOAK_STATISTICS
+        value: all
+        
 # BACKUP STACK
 velero:
   enabled: false
