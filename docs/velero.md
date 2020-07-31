@@ -2,7 +2,7 @@
 
 ## AWS
 
-Before preceding to the installation, check the [Prerequisites](https://gitlab.com/vertigobr/devops/velero#pr%C3%A9-requisitos-para-o-funcionamento-do-velero) to get Velero on your EKS cluster. After that you will have what is needed to put into the values-aws.yaml
+Before proceding to the installation, check the [Prerequisites](https://gitlab.com/vertigobr/devops/velero#pr%C3%A9-requisitos-para-o-funcionamento-do-velero) to get Velero on your EKS cluster. After that you will have what is needed to put into the values-aws.yaml
 
 ### Values variables to be set (values-aws.yaml):
 
@@ -110,5 +110,5 @@ Or create the cluster in wherever cloud you want by using Terraform:
 - [Make your Kubernetes cluster with Terraform modules!](https://gitlab.com/vertigobr/devops/terraform-modules)
 
 ## Clouds
-- The External-DNS depends uppon credentials to update DNS records in your cloud provider. Instead of putting those credentials in open files you may want to pass it through command line:
+- The External-DNS depends on credentials to update DNS records in your cloud provider. Instead of putting those credentials in open files you may want to pass it through command line:
 

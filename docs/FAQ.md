@@ -10,10 +10,10 @@ A: No, VKPR is developed using Helm.
 A: VKPR is in stage beta, tests were done in AWS and DigitalOcean, other clouds are still not guaranteed.
 
 #### Q: Does VKPR have a roadmap for future releases?
-A: VKPR have a roadmap for future releases, see roadmap [here](./roadmap.md).
+A: VKPR has a roadmap for future releases, see roadmap [here](./roadmap.md).
 
 #### Q: What is the community behind VKPR?
-A: VKPR is an open-source project, with licence [Apache License Version 2.0](../LICENSE), which means that all contributions are welcome, either via code, documentation or by filing issues.
+A: VKPR is an open-source project, with [Apache License Version 2.0](../LICENSE), which means that all contributions are welcome, either via code, documentation or by filing issues.
 
-#### Q: I found a bug, what do?
-A: When there is any bug you want to report, please creating an **issue** in GitHub.
+#### Q: I found a bug, what do I do?
+A:  Please, report it by creating an **issue** on GitHub.

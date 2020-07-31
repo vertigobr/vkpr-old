@@ -21,7 +21,7 @@ aws s3api create-bucket \
 
 ### User Creation
 
-After execute the cloud provider's commands, you must write Velero credentials into a file.
+After executing the cloud provider's commands, you must write Velero credentials into a file.
 
 #### AWS
 

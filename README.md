@@ -8,7 +8,7 @@ VKPR is inspired in the [BKPR project](https://github.com/bitnami/kube-prod-runt
 
 VKPR was developed to make Kubernetes easier to use. It is composed of third-party sets, organized to deliver a production-ready Kubernetes with minimal effort.
 
-The project is structured in stacks that group products with correlative objective. At the moment, these are the current available stacks:
+The project is structured in stacks that group products with correlative objective. At the moment, these are the available stacks:
 
 - **[Ingress stack](#ingress-stack):**
   - NGINX Ingress Controller
@@ -29,7 +29,7 @@ The project is structured in stacks that group products with correlative objecti
 
 ## Installation
 
-The VKPR installation use [helm](https://helm.sh/):
+The VKPR installation uses [helm](https://helm.sh/):
 
 ```sh
 helm repo add vertigo https://vertigobr.github.io/vkpr
@@ -44,7 +44,7 @@ helm upgrade -i -f values.yaml -n vkpr vkpr vertigo/vkpr
 The **Ingress stack** is dedicated to tools that configure external connections to Kubernetes.
 
 - [NGINX Ingress Controller](./docs/modules.md#nginx-ingress-controller) is a Kubernetes Ingress Controller using NGINX as a reverse proxy and load balancer.
-- [ExternalDNS](./docs/modules.md#externaldns) is a Kubernetes addon that configure public DNS servers with information about services exposed by Kubernetes and making them discoverable.
+- [ExternalDNS](./docs/modules.md#externaldns) is a Kubernetes addon that configures public DNS servers with information about services exposed by Kubernetes and making them discoverable.
 
 ### Logging stack
 
@@ -65,7 +65,7 @@ The **Monitoring Stack** is dedicated to observation and metrics management tool
 
 The **Security Stack** is dedicated to security tools, like identity and secret management, to your services.
 
-- [cert-manager](./docs/modules.md#cert-manager) is a Kubernetes add-on to automate the management and issuance of TLS certificates from various issuing sources.
+- [cert-manager](./docs/modules.md#cert-manager) is a Kubernetes addon to automate the management and issuance of TLS certificates from various issuing sources.
 - [Vault](./docs/modules.md#vault) secures, stores, and tightly controls access to tokens, passwords, certificates, API keys, and other secrets in modern computing. 
 - [Keycloak](./docs/modules.md#keycloak) is an Open Source Identity and Access Management solution for modern Applications and Services.
 
@@ -95,7 +95,7 @@ The **Backup Stack** is dedicated to backup and restore tools in order to migrat
 
 ## Contributing
 
-Pull requests/Merge Request are welcome! Please open an issue first and discuss with us about the proposing changes and be sure to perform tests in a proper way.
+Pull requests/Merge Requests are welcome! Please open an issue first and discuss with us about the proposing changes and be sure to perform tests in a proper way.
 
 ## Support
 

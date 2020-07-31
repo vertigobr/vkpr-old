@@ -27,7 +27,7 @@ Ingress exposes HTTP and HTTPS routes from outside the cluster to services withi
 
 #### Implementation
 
-By default the **NGINX Ingress Controller** is enable in *VKPR* installation. An example of configuration:
+By default the **NGINX Ingress Controller** is enabled in *VKPR* installation. An example of configuration :
 
 ```yaml
 nginx-ingress:
@@ -41,7 +41,7 @@ nginx-ingress:
       maxReplicas: 3
 ```
 
-To view more configuration, access the [documentation](https://github.com/helm/charts/tree/master/stable/nginx-ingress#configuration). 
+To see more configurations, access the [documentation](https://github.com/helm/charts/tree/master/stable/nginx-ingress#configuration). 
 
 ### ExternalDNS
 
@@ -51,7 +51,7 @@ Inspired by [Kubernetes DNS](https://github.com/kubernetes/dns), Kubernetes' clu
 
 #### Implementation
 
-By default the **ExternalDNS** is disable in *VKPR* installation. An example of configuration:
+By default the **ExternalDNS** is disabled in *VKPR* installation. An example of configuration:
 
 ```yaml
 external-dns:
@@ -65,17 +65,17 @@ external-dns:
   interval: "1m"
 ```
 
-To view more configuration, access the [documentation](https://github.com/bitnami/charts/tree/master/bitnami/external-dns#parameters). 
+To see more configurations, access the [documentation](https://github.com/bitnami/charts/tree/master/bitnami/external-dns#parameters). 
 
 ## Logging stack
 
 ### Loki
 
-[Loki](https://github.com/grafana/loki) is a horizontally-scalable, highly-available, multi-tenant log aggregation system inspired by [Prometheus](https://prometheus.io/). It is designed to be very cost effective and easy to operate. It does not index the contents of the logs, but rather a set of labels for each log stream.
+[Loki](https://github.com/grafana/loki) is a horizontally-scalable, highly-available, multi-tenant log aggregation system inspired by [Prometheus](https://prometheus.io/). It is designed to be very cost effective and easy to operate. It does not index logs content, but rather a set of labels for each log stream.
 
 #### Implementation
 
-By default the **Loki** is enable in *VKPR* installation. An example of configuration:
+By default the **Loki** is enabled in *VKPR* installation. An example of configuration:
 
 ```yaml
 loki-stack:
@@ -83,7 +83,7 @@ loki-stack:
   serviceScheme: https
 ```
 
-To view more configuration, access the [documentation](https://github.com/grafana/loki/tree/master/production/helm).
+To see more configurations, access the [documentation](https://github.com/grafana/loki/tree/master/production/helm).
 
 ## Monitoring stack
 
@@ -101,7 +101,7 @@ Prometheus Operator contains the following modules:
 
 #### Implementation
 
-By default the **Prometheus Operator** is enable in *VKPR* installation. An example of configuration:
+By default the **Prometheus Operator** is enabled in *VKPR* installation. An example of configuration:
 
 ```yaml
 prometheus-operator:
@@ -118,19 +118,19 @@ prometheus-operator:
       hosts: ["grafana.whoami.com"]
 ```
 
-To view more configuration, access the [documentation](https://github.com/helm/charts/tree/master/stable/prometheus-operator#general).
+To see more configurations, access the [documentation](https://github.com/helm/charts/tree/master/stable/prometheus-operator#general).
 
 ## Security stack
 
 ### cert-manager
 
-[cert-manager](https://github.com/jetstack/cert-manager) is a Kubernetes add-on to automate the management and issuance of TLS certificates from various issuing sources.
+[cert-manager](https://github.com/jetstack/cert-manager) is a Kubernetes addon to automate the management and issuance of TLS certificates from various issuing sources.
 
 It will ensure certificates are valid and up to date periodically, and attempt to renew certificates at an appropriate time before expiry.
 
 #### Implementation
 
-By default the **cert-manager** is disable in *VKPR* installation. An example of configuration:
+By default the **cert-manager** is disabled in *VKPR* installation. An example of configuration:
 
 ```yaml
 cert-manager:
@@ -141,7 +141,7 @@ cert-manager:
     defaultIssuerGroup: cert-manager.io
 ```
 
-To view more configuration, access the [documentation](https://github.com/jetstack/cert-manager/blob/master/deploy/charts/cert-manager/README.template.md#configuration).
+To see more configurations, access the [documentation](https://github.com/jetstack/cert-manager/blob/master/deploy/charts/cert-manager/README.template.md#configuration).
 
 ### Vault
 
@@ -151,7 +151,7 @@ A modern system requires access to a multitude of secrets: database credentials,
 
 #### Implementation
 
-By default the **Vault** is disable in *VKPR* installation. An example of configuration:
+By default the **Vault** is disabled in *VKPR* installation. An example of configuration:
 
 ```yaml
 vault:
@@ -163,7 +163,7 @@ vault:
         enabled: true
 ```
 
-To view more configuration, access the [documentation](https://github.com/hashicorp/vault-helm).
+To see more configurations, access the [documentation](https://github.com/hashicorp/vault-helm).
 
 ### Keycloak
 
@@ -171,7 +171,7 @@ To view more configuration, access the [documentation](https://github.com/hashic
 
 #### Implementation
 
-By default the **Keycloak** is disable in *VKPR* installation. An example of configuration:
+By default the **Keycloak** is disabled in *VKPR* installation. An example of configuration:
 
 ```yaml
 keycloak:
@@ -187,11 +187,11 @@ To view more configuration, access the [documentation](https://github.com/codece
 
 ### Velero
 
-[Velero](https://github.com/vmware-tanzu/velero) gives you tools to back up and restore your Kubernetes cluster resources and persistent volumes. You can run Velero with a public cloud platform or on-premises.
+[Velero](https://github.com/vmware-tanzu/velero) gives you tools to back up and restore your Kubernetes cluster resources and persistent volumes.
 
 #### Implementation
 
-By default the **Velero** is disable in *VKPR* installation. An example of configuration:
+By default **Velero** is disabled in *VKPR* installation. An example of configuration:
 
 ```yaml
 velero:
@@ -205,4 +205,4 @@ velero:
           name: plugins
 ```
 
-To view more configuration, access the [documentation](https://github.com/vmware-tanzu/helm-charts/tree/main/charts/velero).
+To see more configurations, access the [documentation](https://github.com/vmware-tanzu/helm-charts/tree/main/charts/velero).
