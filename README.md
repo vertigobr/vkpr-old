@@ -1,5 +1,6 @@
 ![](https://img.shields.io/badge/status-In%20development-yellow)
 ![](https://img.shields.io/badge/license-Apache%202.0-blue)
+![Release Helm chart](https://github.com/vertigobr/vkpr/workflows/Release%20Helm%20chart/badge.svg)
 # VKPR - Vertigo Kubernetes Production Runtime
 
 VKPR is inspired in the [BKPR project](https://github.com/bitnami/kube-prod-runtime) but it's handed over through Helm chart.
@@ -79,8 +80,8 @@ The **Backup Stack** is dedicated to backup and restore tools in order to migrat
 
 |                                 Charts                                 | VKPR 0.7.0 |
 |------------------------------------------------------------------------|------------|
-| [cert-manager](./docs/modules.md#cert-manager)                         |  `0.14.1`  |
-| [ExternalDNS](./docs/modules.md#externaldns)                           |  `2.20.10` |
+| [cert-manager](./docs/modules.md#cert-manager)                         |  `0.16.0`  |
+| [ExternalDNS](./docs/modules.md#externaldns)                           |  `3.2.2`   |
 | [Loki](./docs/modules.md#loki)                                         |  `0.37.0`  |
 | [Keycloak](./docs/modules.md#keycloak)                                 |  `8.2.2`   |
 | [NGINX Ingress Controller](./docs/modules.md#nginx-ingress-controller) |  `1.34.3`  |

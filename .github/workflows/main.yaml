@@ -6,6 +6,23 @@ on:
       - master
 
 jobs:
+  changes:
+    name: Check changes
+    runs-on: ubuntu-latest
+    outputs:
+      charts: ${{ steps.filter.outputs.charts }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: dorny/paths-filter@v2.2.0
+        id: filter
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          filters: |
+            charts:
+              - 'charts/vkpr/Chart.yaml'
+
   chart:
     name: Release Chart
     runs-on: ubuntu-latest
@@ -19,9 +36,8 @@ jobs:
           git config --global user.name "$GITHUB_ACTOR"
           git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-      - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.0.0-rc.2
-        with:
-          charts_dir: vkpr
+      - name: Run release
+        run: |
+          .github/workflows/release.sh
         env:
           CR_TOKEN: "${{ secrets.PERSONAL_TOKEN }}"

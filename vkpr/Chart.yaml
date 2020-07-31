@@ -1,9 +1,9 @@
 apiVersion: v2
 name: vkpr
-type: application
 version: 0.7.0
 appVersion: v1.4.0
 home: https://github.com/vertigobr/vkpr
+icon: https://vertigo.com.br/wp-content/uploads/favicon.png
 description: VKPR Helm chart (Vertigo Kubernetes Production Runtime)
 keywords:
   - vkpr
