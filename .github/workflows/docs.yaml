@@ -66,4 +66,7 @@ jobs:
           git reset --hard
           git checkout gh-pages
           cp -r --force /tmp/docusaurus/build/* .
-          ls -lhart
+          git add .
+          git commit --message="Update gh-pages" --signoff
+          local repo_url="https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY"
+          git push "$repo_url" gh-pages
