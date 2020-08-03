@@ -22,7 +22,7 @@ nginx-ingress:
 #      maxReplicas: 3
 #    service:
 #      annotations:
-#        external-dns.alpha.kubernetes.io/hostname: "ipaas.api.vertigo.com.br"
+#        external-dns.alpha.kubernetes.io/hostname: "ipaas.<DOMAIN_NAME>"
 
 external-dns:
   enabled: false
@@ -43,7 +43,7 @@ cert-manager:
 
 # dados para o CRD do ACME
 acme:
-  email: andre@vertigo.com.br
+  email: <ACME_EMAIL>
 
 # chart values
 ingress:
@@ -52,11 +52,11 @@ ingress:
     kubernetes.io/ingress.class: nginx
     kubernetes.io/tls-acme: "true"
   hosts:
-  - host: whoami.api.vertigo.com.br
+  - host: whoami.<DOMAIN_NAME>
     paths: ["/"]
   tls:
   - hosts:
-    - whoami.api.vertigo.com.br
+    - whoami.<DOMAIN_NAME>
     secretName: whoami-cert
 
 #
@@ -78,10 +78,10 @@ ingress:
 #       kubernetes.io/tls-acme: "true"
 #     path: /
 #     hosts:
-#       - kibana.api.vertigo.com.br
+#       - kibana.<DOMAIN_NAME>
 #     tls:
 #     - hosts:
-#       - kibana.api.vertigo.com.br
+#       - kibana.<DOMAIN_NAME>
 #       secretName: kibana-vkpr-cert
 
 # GRAYLOG
@@ -125,10 +125,10 @@ graylog:
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: "true"
       hosts:
-        - graylog.api.vertigo.com.br
+        - graylog.<DOMAIN_NAME>
       tls:
         - hosts:
-          - graylog.api.vertigo.com.br
+          - graylog.<DOMAIN_NAME>
           secretName: graylog-vkpr-cert
 
 loki-stack:
@@ -151,15 +151,15 @@ prometheus-operator:
       annotations:
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: "true"
-      hosts: ["grafana.api.vertigo.com.br"]
+      hosts: ["grafana.<DOMAIN_NAME>"]
       tls:
       - hosts:
-        - grafana.api.vertigo.com.br
+        - grafana.<DOMAIN_NAME>
         secretName: grafana-vkpr-cert
 
     grafana.ini:
       server:
-        root_url: "https://grafana.api.vertigo.com.br"
+        root_url: "https://grafana.<DOMAIN_NAME>"
       auth.generic_oauth:
         enabled: true
         scopes: openid profile email
@@ -167,10 +167,10 @@ prometheus-operator:
         # temporario -->
         client_secret: "41164d74-9a80-4fd4-a4ef-9496455b53f4"
         # <--
-        auth_url: http://keycloak.api.vertigo.com.br/auth/realms/vkpr/protocol/openid-connect/auth
-        token_url: http://keycloak.api.vertigo.com.br/auth/realms/vkpr/protocol/openid-connect/token
-        api_url: http://keycloak.api.vertigo.com.br/auth/realms/vkpr/protocol/openid-connect/userinfo
-        allowed_domains: api.vertigo.com.br vertigo.com.br
+        auth_url: http://keycloak.<DOMAIN_NAME>/auth/realms/vkpr/protocol/openid-connect/auth
+        token_url: http://keycloak.<DOMAIN_NAME>/auth/realms/vkpr/protocol/openid-connect/token
+        api_url: http://keycloak.<DOMAIN_NAME>/auth/realms/vkpr/protocol/openid-connect/userinfo
+        allowed_domains: <DOMAIN_NAME> vertigo.com.br
         allow_sign_up: true
 
 # BEATS - INICO
@@ -214,10 +214,10 @@ keycloak:
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: "true"
       hosts:
-        - keycloak.api.vertigo.com.br
+        - keycloak.<DOMAIN_NAME>
       tls:
         - hosts:
-          - keycloak.api.vertigo.com.br
+          - keycloak.<DOMAIN_NAME>
           secretName: keycloak-vkpr-cert
     extraVolumes: |
       - name: keycloak-data
