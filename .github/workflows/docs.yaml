@@ -65,7 +65,7 @@ jobs:
           npx docusaurus build --out-dir /tmp/docusaurus/build
           git reset --hard
           git checkout gh-pages
-          cp --force /tmp/docusaurus/build ./
+          cp -r --force /tmp/docusaurus/build ./
           git add .
           git commit --message="Update gh-pages" --signoff
           local repo_url="https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY"
