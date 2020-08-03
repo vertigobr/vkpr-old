@@ -190,7 +190,7 @@ prometheus-operator:
         scopes: openid profile email
         client_id: grafana
         # temporario -->
-        client_secret: "41164d74-9a80-4fd4-a4ef-9496455b53f4"
+        client_secret: ""
         # <--
         auth_url: http://keycloak.api.vertigo.com.br/auth/realms/vkpr/protocol/openid-connect/auth
         token_url: http://keycloak.api.vertigo.com.br/auth/realms/vkpr/protocol/openid-connect/token
