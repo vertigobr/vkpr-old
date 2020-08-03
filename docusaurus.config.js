@@ -1,11 +1,11 @@
 module.exports = {
   title: 'VKPR',
   tagline: 'The tagline of my site',
-  url: 'https://kyfelipe.github.io', // https://vertigobr.github.io
+  url: 'https://vertigobr.github.io',
   baseUrl: '/vkpr/',
   onBrokenLinks: 'throw',
   favicon: 'img/favicon.ico',
-  organizationName: 'kyfelipe', // vertigobr
+  organizationName: 'vertigobr',
   projectName: 'vkpr',
   themeConfig: {
     navbar: {
