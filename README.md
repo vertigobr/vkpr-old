@@ -1,6 +1,5 @@
 ![](https://img.shields.io/badge/status-In%20development-yellow)
 ![](https://img.shields.io/badge/license-Apache%202.0-blue)
-![Release Helm chart](https://github.com/vertigobr/vkpr/workflows/Release%20Helm%20chart/badge.svg)
 # VKPR - Vertigo Kubernetes Production Runtime
 
 VKPR is inspired in the [BKPR project](https://github.com/bitnami/kube-prod-runtime) but it's handed over through Helm chart.
