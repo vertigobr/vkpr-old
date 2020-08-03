@@ -36,7 +36,7 @@ helm repo update
 
 Then, deploy VKPR:
 ```sh
-helm install -f values.yaml -n vkpr vkpr vertigo/vkpr
+helm install -f examples/values-aws.yaml -n vkpr vkpr vertigo/vkpr
 ```
 
 ## Upgrading VKPR
@@ -52,3 +52,30 @@ To remove VKPR in a cluster, execute:
 ```sh
 helm uninstall vkpr
 ```
+
+## Velero set up
+
+### Prerequisites
+Before proceding to the installation, check the [Prerequisites](https://gitlab.com/vertigobr/devops/velero#pr%C3%A9-requisitos-para-o-funcionamento-do-velero) to get Velero on your EKS cluster. After that you will have what is needed to put into the values-aws.yaml
+
+### Values variables to be set (values-aws.yaml):
+
+`<REGION>` Your bucket's region.
+
+`<BUCKET_NAME>`  Your bucket's name.
+
+`<ACCESS_KEY_ID>`  The Access Key ID created in the prerequisites step to the VELERO_USER.
+
+`<SECRET_KEY_ID>` The Secret Key ID of that Access Key.
+
+### Installation
+Using Helm Hub's Velero chart v2.7.4
+
+```
+helm upgrade -i vkpr -n vkpr -f examples/values-aws.yaml stable/vkpr  
+```
+
+Export the KUBECONFIG environment variable in order to point Velero cli to your EKS cluster and run the following command to set the namespace where Velero is installed. 
+
+    
+    velero client config set namespace=vkpr

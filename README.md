@@ -37,7 +37,7 @@ helm repo add vertigo https://vertigobr.github.io/vkpr
 helm repo update
 helm upgrade -i -f values.yaml -n vkpr vkpr vertigo/vkpr
 ```
-
+Take a look on docs to check the installation for a more specific scenario.
 ## Stack
 
 ### Ingress stack
