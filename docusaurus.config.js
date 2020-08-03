@@ -2,7 +2,7 @@ module.exports = {
   title: 'VKPR',
   tagline: 'The tagline of my site',
   url: 'https://kyfelipe.github.io', // https://vertigobr.github.io
-  baseUrl: '/',
+  baseUrl: '/vkpr/',
   onBrokenLinks: 'throw',
   favicon: 'img/favicon.ico',
   organizationName: 'kyfelipe', // vertigobr
