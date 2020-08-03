@@ -236,7 +236,7 @@ vault:
 
 
 keycloak:
-  enabled: true
+  enabled: false
   prometheus:
     operator:
       enabled: true
