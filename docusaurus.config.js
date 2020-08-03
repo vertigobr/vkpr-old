@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'My Site',
+  title: 'VKPR',
   tagline: 'The tagline of my site',
   url: 'https://kyfelipe.github.io', // https://vertigobr.github.io
   baseUrl: '/',
