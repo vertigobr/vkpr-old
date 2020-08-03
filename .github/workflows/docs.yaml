@@ -51,6 +51,7 @@ jobs:
           # USE_SSH: true
           # GIT_USER: kyfelipe
           CURRENT_BRANCH: docs
+          CR_TOKEN: "${{ secrets.PERSONAL_TOKEN }}"
         run: |
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
           git config user.name "$GITHUB_ACTOR"
