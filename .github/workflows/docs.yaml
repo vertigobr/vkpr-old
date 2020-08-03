@@ -63,4 +63,7 @@ jobs:
           fi
           mkdir -p /tmp/docusaurus/build
           npx docusaurus build --out-dir /tmp/docusaurus/build
-          ls -lhart /tmp/docusaurus/build
+          git reset --hard
+          git checkout gh-pages
+          cp -r --force /tmp/docusaurus/build .
+          ls -lhart
