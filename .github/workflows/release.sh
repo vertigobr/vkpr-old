@@ -26,5 +26,4 @@ cp -r --force /tmp/docusaurus/build/* .
 git add .
 git commit --message="Update gh-pages" --signoff
 
-local repo_url="https://x-access-token:$CR_TOKEN@github.com/$GITHUB_REPOSITORY"
-git push "$repo_url" gh-pages
+git push "https://x-access-token:$CR_TOKEN@github.com/$GITHUB_REPOSITORY" gh-pages
