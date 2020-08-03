@@ -23,7 +23,6 @@ examples/velero-aws/notes
 examples/velero-aws/credentials-velero
 examples/nginx-velero-example.yaml
 examples/velero-aws/nginx-velero-example.yaml
-examples/values-aws.yaml
 
 # Others
 ark-plugin-digitalocean/
