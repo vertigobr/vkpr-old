@@ -50,6 +50,7 @@ jobs:
         env:
           USE_SSH: true
           GIT_USER: kyfelipe
+          CURRENT_BRANCH: docs
         run: |
           git config --global user.email "actions@gihub.com"
           git config --global user.name "gh-actions"
