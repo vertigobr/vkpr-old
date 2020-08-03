@@ -1128,7 +1128,7 @@
     "@francoischalifour/autocomplete-preset-algolia" "^1.0.0-alpha.25"
     algoliasearch "^4.0.0"
 
-"@docusaurus/core@^2.0.0-alpha.61":
+"@docusaurus/core@^2.0.0-alpha.58", "@docusaurus/core@^2.0.0-alpha.61":
   version "2.0.0-alpha.61"
   resolved "https://registry.yarnpkg.com/@docusaurus/core/-/core-2.0.0-alpha.61.tgz#4b736d36687bd12fb9399f9ce352e87da4bf8fe7"
   integrity sha512-Ev0v5J7L/Pm3VJMdhhyR8I9tUQo8MhVRUUT+Bf0W3TMYG6jp2cIXE88yCfxOsTDducS7EMrdtUXfvePGH9CE/A==
@@ -1311,7 +1311,7 @@
     fs-extra "^8.1.0"
     sitemap "^3.2.2"
 
-"@docusaurus/preset-classic@^2.0.0-alpha.61":
+"@docusaurus/preset-classic@^2.0.0-alpha.58":
   version "2.0.0-alpha.61"
   resolved "https://registry.yarnpkg.com/@docusaurus/preset-classic/-/preset-classic-2.0.0-alpha.61.tgz#38f9a34d3e5092264cfa48d0242ab774d13aa534"
   integrity sha512-/3HL468XiSZ1T4mdvqnfV6O80Qv4BxAseJGnmkBwS0u6+Q1VgkNxRxVk4B45OWPaurK/Dl+sCn4sAAUWUGRsZg==
