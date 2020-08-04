@@ -105,7 +105,7 @@ graylog:
       hosts: "http://elasticsearch-master:9200"
     mongodb:
       uri: mongodb://vkpr-mongodb-replicaset-client:27017/databasename?replicaSet=rs0
-    rootPassword: vert1234vert1234
+    rootPassword: <ROOT_PASSWORD>
     input:
       tcp:
         service:
@@ -145,7 +145,7 @@ prometheus-operator:
     image:
       repository: vertigo/grafana
       tag: 7.0.0
-    adminPassword: "vertigo"
+    adminPassword: "<ROOT_PASSWORD>"
     ingress:
       enabled: true
       annotations:
@@ -207,7 +207,7 @@ keycloak:
   enabled: true
   keycloak:
     username: keycloak
-    password: admin123
+    password: <ROOT_PASSWORD>
     ingress:
       enabled: true
       annotations:

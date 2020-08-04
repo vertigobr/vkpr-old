@@ -26,7 +26,7 @@ ingress:
 prometheus-operator:
   enabled: true
   grafana:
-    adminPassword: "vertigo"
+    adminPassword: <ROOT_PASSWORD>
 
 velero:
   enabled: false

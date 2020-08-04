@@ -165,7 +165,7 @@ prometheus-operator:
     image:
       repository: vertigo/grafana
       tag: 7.0.0
-    adminPassword: "vertigo"
+    adminPassword: "<ROOT_PASSWORD>"
     persistence:
       enabled: true
       storageClassName: do-block-storage
@@ -246,7 +246,7 @@ keycloak:
           release: "vkpr"
   keycloak:
     username: keycloak
-    password: admin123
+    password: <ROOT_PASSWORD>
     extraInitContainers: |
        - name: extensions
          image: busybox

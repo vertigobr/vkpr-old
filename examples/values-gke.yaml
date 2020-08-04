@@ -43,7 +43,7 @@ cert-manager:
 
 # dados para o CRD do ACME
 acme:
-  email: andre@vertigo.com.br
+  email: <ACME_EMAIL>
 
 # chart values
 ingress:
@@ -138,7 +138,7 @@ graylog:
 prometheus-operator:
   enabled: false
   grafana:
-    adminPassword: "vertigo"
+    adminPassword: "<ROOT_PASSWORD>"
     ingress:
       enabled: true
       annotations:
@@ -169,27 +169,27 @@ prometheus-operator:
 #
 # SECURITY STACK
 #
-# keycloak:
-#   enabled: false
-#   keycloak:
-#     username: keycloak
-#     password: admin123
-#     ingress:
-#       enabled: true
-#       annotations:
-#         kubernetes.io/ingress.class: nginx
-#         kubernetes.io/tls-acme: "true"
-#       hosts:
-#         - keycloak.<DOMAIN_NAME>
-#       tls:
-#         - hosts:
-#           - keycloak.<DOMAIN_NAME>
-#           secretName: keycloak-vkpr-cert
-#     extraVolumes: |
-#       - name: keycloak-data
-#         persistentVolumeClaim:
-#           claimName: keycloak-data-volume
-#     extraVolumeMounts: |
-#       - name: keycloak-data
-#         mountPath: "/opt/jboss/keycloak/standalone/data"
-#         readOnly: false
+keycloak:
+  enabled: false
+  keycloak:
+    username: keycloak
+    password: <ROOT_PASSWORD>
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: "true"
+      hosts:
+        - keycloak.<DOMAIN_NAME>
+      tls:
+        - hosts:
+          - keycloak.<DOMAIN_NAME>
+          secretName: keycloak-vkpr-cert
+    extraVolumes: |
+      - name: keycloak-data
+        persistentVolumeClaim:
+          claimName: keycloak-data-volume
+    extraVolumeMounts: |
+      - name: keycloak-data
+        mountPath: "/opt/jboss/keycloak/standalone/data"
+        readOnly: false
