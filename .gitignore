@@ -14,9 +14,9 @@ test_tf/
 terraform.tfstate.backup
 
 # VKPR
-vkpr/DO-velero-keys
-vkpr/crds/cert-manager.yaml
-vkpr/Chart.lock
+charts/vkpr/DO-velero-keys
+charts/vkpr/crds/cert-manager.yaml
+charts/vkpr/Chart.lock
 
 # Examples
 examples/velero-aws/notes
@@ -28,3 +28,6 @@ examples/velero-aws/nginx-velero-example.yaml
 ark-plugin-digitalocean/
 velero-policy.json
 kubeconfig
+node_modules/
+.docusaurus/
+build/
