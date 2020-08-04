@@ -28,6 +28,14 @@ keycloak:
 vault:
   enabled: false
 
+loki-stack:
+  enabled: true
+
+prometheus-operator:
+  enabled: true
+  prometheusOperator:
+    createCustomResource: false
+
 # dados para o CRD do ACME
 acme:
   email: someone@example.com
