@@ -16,15 +16,18 @@ nginx-ingress:
   controller:
     publishService:
       enabled: true
-
+#    autoscaling:
+#      enabled: true
+#      minReplicas: 1
+#      maxReplicas: 3
+#    service:
+#      annotations:
+#        external-dns.alpha.kubernetes.io/hostname: "ipaas.<DOMAIN_NAME>"
 
 external-dns:
-  enabled: true
-  image:
-    tag: 0.7.2-debian-10-r49
-  policy: sync  
+  enabled: false
   rbac:
-    create: true
+    create: false
   sources:
     - ingress
     - service
@@ -32,13 +35,12 @@ external-dns:
   interval: "1m"
 
 cert-manager:
-  enabled: true
+  enabled: false
   ingressShim:
     defaultIssuerName: letsencrypt-production
     defaultIssuerKind: ClusterIssuer
     defaultIssuerGroup: cert-manager.io
-  installCRDs: false
-  
+
 # dados para o CRD do ACME
 acme:
   email: <ACME_EMAIL>
@@ -91,7 +93,7 @@ tags:
 elasticsearch:
   enabled: false
   volumeClaimTemplate:
-    storageClassName: "do-block-storage"
+    storageClassName: "gp2"
 # mongodb do graylog
 mongodb-replicaset:
   enabled: false
@@ -137,40 +139,13 @@ loki-stack:
 #
 prometheus-operator:
   enabled: true
-  prometheus:
-    prometheusSpec:
-      storageSpec:
-        volumeClaimTemplate:
-          spec:
-            accessModes: ["ReadWriteOnce"]
-            storageClassName: do-block-storage
-            resources:
-              requests:
-                storage: 5Gi
-  prometheus-node-exporter:
-    service:
-      port: 30206
-      targetPort: 30206               
-  alertmanager:
-    alertmanagerSpec:
-      storage:
-        volumeClaimTemplate:
-          spec:
-            accessModes: ["ReadWriteOnce"]
-            storageClassName: do-block-storage
-            resources:
-              requests:
-                storage: 5Gi
+  prometheusOperator:
+    createCustomResource: false
   grafana:
     image:
       repository: vertigo/grafana
       tag: 7.0.0
     adminPassword: "<ROOT_PASSWORD>"
-    persistence:
-      enabled: true
-      storageClassName: do-block-storage
-      accessModes: ["ReadWriteOnce"]
-      size: 5Gi  
     ingress:
       enabled: true
       annotations:
@@ -190,22 +165,15 @@ prometheus-operator:
         scopes: openid profile email
         client_id: grafana
         # temporario -->
-        client_secret: ""
+        client_secret: "41164d74-9a80-4fd4-a4ef-9496455b53f4"
         # <--
         auth_url: http://keycloak.<DOMAIN_NAME>/auth/realms/vkpr/protocol/openid-connect/auth
         token_url: http://keycloak.<DOMAIN_NAME>/auth/realms/vkpr/protocol/openid-connect/token
         api_url: http://keycloak.<DOMAIN_NAME>/auth/realms/vkpr/protocol/openid-connect/userinfo
         allowed_domains: <DOMAIN_NAME> vertigo.com.br
         allow_sign_up: true
-  kubeEtcd:
-    enabled: false
-  kubeControllerManager:
-    enabled: false
-  kubeScheduler:
-    enabled: false
 
-
-# BEATS - INICIO
+# BEATS - INICO
 # NAO FUNCIONA AINDA (BEATS)
 # metric-beat embutido (sem subchart)
 # metricbeat:
@@ -224,6 +192,7 @@ prometheus-operator:
 #
 # SECURITY STACK
 #
+
 vault:
   enabled: false
   server:
@@ -234,35 +203,11 @@ vault:
 #    dev:
 #      enabled: true
 
-
 keycloak:
-  enabled: false
-  prometheus:
-    operator:
-      enabled: true
-      serviceMonitor:
-        namespace: "vkpr" 
-        selector:
-          release: "vkpr"
+  enabled: true
   keycloak:
     username: keycloak
     password: <ROOT_PASSWORD>
-    extraInitContainers: |
-       - name: extensions
-         image: busybox
-         imagePullPolicy: IfNotPresent
-         command:
-           - sh
-         args:
-           - -c
-           - |
-             echo "Copying extensions..."
-             wget -O /deployments/keycloak-metrics-spi.jar https://github.com/aerogear/keycloak-metrics-spi/releases/download/1.0.1/keycloak-metrics-spi-1.0.1.jar
-         volumeMounts:
-          - name: deployments
-            mountPath: /deployments
-    persistence:
-      dbVendor: h2
     ingress:
       enabled: true
       annotations:
@@ -281,9 +226,6 @@ keycloak:
       - name: vkpr-realm-secret
         secret:
           secretName: vkpr-realm-secret
-      - name: deployments
-        emptyDir: {}
-
     extraVolumeMounts: |
       - name: keycloak-data
         mountPath: "/opt/jboss/keycloak/standalone/data"
@@ -291,121 +233,32 @@ keycloak:
       - name: vkpr-realm-secret
         mountPath: "/realm/"
         readOnly: true
-      - name: deployments
-        mountPath: /opt/jboss/keycloak/standalone/deployments
+    extraArgs: -Dkeycloak.import=/realm/vkpr-realm.json
 
-    extraEnv: |
-      - name: KEYCLOAK_IMPORT
-        value: /realm/realm-realm-export.json
-      - name: KEYCLOAK_STATISTICS
-        value: all
-        
 # BACKUP STACK
 velero:
   enabled: false
   image:
     repository: velero/velero
-    tag: v1.3.1
+    tag: v1.2.0
     pullPolicy: IfNotPresent
-
-  podAnnotations: {}
-
-  resources: {}
-
-  initContainers: 
-    - name: velero-plugin-for-do
-      image: digitalocean/velero-plugin:v1.0.0
-      imagePullPolicy: IfNotPresent
-      volumeMounts:
-        - mountPath: /target
-          name: plugins
-    - name: velero-plugin-for-aws
-      image: velero/velero-plugin-for-aws:v1.0.0
-      imagePullPolicy: IfNotPresent
-      volumeMounts:
-        - mountPath: /target
-          name: plugins
-
-  securityContext: {}
-
-  tolerations: []
-
-  nodeSelector: {}
-
-  extraVolumes: []
-
-  extraVolumeMounts: []
-
-  metrics:
-    enabled: true
-    scrapeInterval: 30s
-
-    podAnnotations:
-      prometheus.io/scrape: "true"
-      prometheus.io/port: "8085"
-      prometheus.io/path: "/metrics"
-
-    serviceMonitor:
-      enabled: false
-      additionalLabels: {}
-
-  installCRDs: true
-
   configuration:
     provider: aws
-
     backupStorageLocation:
       name: aws
-      bucket: <SPACES_NAME> 
+      bucket: <BUCKET_NAME>
       prefix:
-      config:
-        region: <SPACES_REGION>
-        s3Url: https://<SPACES_REGION>.digitaloceanspaces.com
+      config: 
+        region: <BUCKET_REGION>
     volumeSnapshotLocation:
-      name: velero.io/aws
-      config: {}
-    backupSyncPeriod:
-    resticTimeout:
-    restoreResourcePriorities:
-    restoreOnlyMode:
-    extraEnvVars: {}
-    logLevel:
-    logFormat:
-  rbac:
-    create: true
-    clusterAdministrator: true
-  serviceAccount:
-    server:
-      create: true
-      name:
-      annotations:
-
-
+      name: aws
+      config:
+        region: <BUCKET_REGION>
   credentials:
     useSecret: true
     existingSecret:
     secretContents:
-      digitalocean_token: <DIGITAL_OCEAN_TOKEN>
-      cloud: | 
+      cloud: |
         [default]
-        aws_access_key_id=<SPACES_ACCESS_KEY>
-        aws_secret_access_key=<SPACES_SECRET_KEY>
- 
-
-  backupsEnabled: true
-  snapshotsEnabled: true
-
-  deployRestic: false
-
-  restic:
-    podVolumePath: /var/lib/kubelet/pods
-    privileged: false
-    priorityClassName: {}
-    resources: {}
-    tolerations: []
-    extraVolumes: []
-    extraVolumeMounts: []
-    securityContext: {}
-  schedules: {}
-  configMaps: {}
-
+        aws_access_key_id=<ACCESS_KEY_ID>
+        aws_secret_access_key=<SECRET_KEY_ID>

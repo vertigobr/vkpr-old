@@ -59,7 +59,7 @@ ingress:
 #      hosts: "http://elasticsearch-master:9200"
 #    mongodb:
 #      uri: mongodb://vkpr-mongodb-replicaset-client:27017/databasename?replicaSet=rs0
-#    rootPassword: vert1234vert1234
+#    rootPassword: <ROOT_PASSWORD>
 #    input:
 #      tcp:
 #        service:
@@ -94,7 +94,7 @@ prometheus-operator:
     image:
       repository: vertigo/grafana
       tag: 7.0.0
-    adminPassword: "vertigo"
+    adminPassword: "<ROOT_PASSWORD>"
     plugins:
       - grafana-piechart-panel
     ingress:
@@ -109,7 +109,7 @@ prometheus-operator:
         enabled: true
         scopes: openid profile email
         client_id: grafana
-        client_secret: "e4e342e4-b191-46fa-bfae-b7d5a8263e35"
+        client_secret: ""
         auth_url: http://keycloak.localdomain:32080/auth/realms/vkpr/protocol/openid-connect/auth
         token_url: http://keycloak.localdomain:32080/auth/realms/vkpr/protocol/openid-connect/token
         api_url: http://keycloak.localdomain:32080/auth/realms/vkpr/protocol/openid-connect/userinfo
@@ -129,7 +129,7 @@ keycloak:
           release: vkpr
   keycloak:
     username: keycloak
-    password: admin123
+    password: <ROOT_PASSWORD>
     extraInitContainers: |
        - name: extensions
          image: busybox

@@ -20,13 +20,13 @@ ingress:
     kubernetes.io/ingress.class: nginx
     kubernetes.io/tls-acme: "true"
   hosts:
-    - host: whoami.api.vertigo.com.br
+    - host: whoami.<DOMAIN_NAME>
       paths: ["/"]
 
 prometheus-operator:
   enabled: true
   grafana:
-    adminPassword: "vertigo"
+    adminPassword: <ROOT_PASSWORD>
 
 velero:
   enabled: false

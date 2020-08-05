@@ -22,7 +22,7 @@ nginx-ingress:
 #      maxReplicas: 3
 #    service:
 #      annotations:
-#        external-dns.alpha.kubernetes.io/hostname: "ipaas.api.vertigo.com.br"
+#        external-dns.alpha.kubernetes.io/hostname: "ipaas.<DOMAIN_NAME>"
 
 external-dns:
   enabled: true
@@ -43,7 +43,7 @@ cert-manager:
 
 # dados para o CRD do ACME
 acme:
-  email: andre@vertigo.com.br
+  email: <ACME_EMAIL>
 
 # chart values
 ingress:
@@ -52,11 +52,11 @@ ingress:
     kubernetes.io/ingress.class: nginx
     kubernetes.io/tls-acme: "true"
   hosts:
-  - host: whoami.api.vertigo.com.br
+  - host: whoami.<DOMAIN_NAME>
     paths: ["/"]
   tls:
   - hosts:
-    - whoami.api.vertigo.com.br
+    - whoami.<DOMAIN_NAME>
     secretName: whoami-cert
 
 #
@@ -78,10 +78,10 @@ ingress:
 #       kubernetes.io/tls-acme: "true"
 #     path: /
 #     hosts:
-#       - kibana.api.vertigo.com.br
+#       - kibana.<DOMAIN_NAME>
 #     tls:
 #     - hosts:
-#       - kibana.api.vertigo.com.br
+#       - kibana.<DOMAIN_NAME>
 #       secretName: kibana-vkpr-cert
 
 # GRAYLOG
@@ -105,7 +105,7 @@ graylog:
       hosts: "http://elasticsearch-master:9200"
     mongodb:
       uri: mongodb://vkpr-mongodb-replicaset-client:27017/graylog?replicaSet=rs0
-    rootPassword: vert1234vert1234
+    rootPassword: <ROOT_PASSWORD>
     input:
       tcp:
         service:
@@ -125,10 +125,10 @@ graylog:
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: "true"
       hosts:
-        - graylog.api.vertigo.com.br
+        - graylog.<DOMAIN_NAME>
       tls:
         - hosts:
-          - graylog.api.vertigo.com.br
+          - graylog.<DOMAIN_NAME>
           secretName: graylog-vkpr-cert
 
 
@@ -138,16 +138,16 @@ graylog:
 prometheus-operator:
   enabled: false
   grafana:
-    adminPassword: "vertigo"
+    adminPassword: "<ROOT_PASSWORD>"
     ingress:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: "true"
-      hosts: ["grafana.api.vertigo.com.br"]
+      hosts: ["grafana.<DOMAIN_NAME>"]
       tls:
       - hosts:
-        - grafana.api.vertigo.com.br
+        - grafana.<DOMAIN_NAME>
         secretName: grafana-vkpr-cert
 
 # BEATS - INICIO
@@ -169,27 +169,27 @@ prometheus-operator:
 #
 # SECURITY STACK
 #
-# keycloak:
-#   enabled: false
-#   keycloak:
-#     username: keycloak
-#     password: admin123
-#     ingress:
-#       enabled: true
-#       annotations:
-#         kubernetes.io/ingress.class: nginx
-#         kubernetes.io/tls-acme: "true"
-#       hosts:
-#         - keycloak.api.vertigo.com.br
-#       tls:
-#         - hosts:
-#           - keycloak.api.vertigo.com.br
-#           secretName: keycloak-vkpr-cert
-#     extraVolumes: |
-#       - name: keycloak-data
-#         persistentVolumeClaim:
-#           claimName: keycloak-data-volume
-#     extraVolumeMounts: |
-#       - name: keycloak-data
-#         mountPath: "/opt/jboss/keycloak/standalone/data"
-#         readOnly: false
+keycloak:
+  enabled: false
+  keycloak:
+    username: keycloak
+    password: <ROOT_PASSWORD>
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: "true"
+      hosts:
+        - keycloak.<DOMAIN_NAME>
+      tls:
+        - hosts:
+          - keycloak.<DOMAIN_NAME>
+          secretName: keycloak-vkpr-cert
+    extraVolumes: |
+      - name: keycloak-data
+        persistentVolumeClaim:
+          claimName: keycloak-data-volume
+    extraVolumeMounts: |
+      - name: keycloak-data
+        mountPath: "/opt/jboss/keycloak/standalone/data"
+        readOnly: false
