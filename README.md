@@ -33,7 +33,7 @@ The project is structured in stacks that group products with correlative objecti
 The VKPR installation uses [helm](https://helm.sh/):
 
 ```sh
-helm repo add vertigo https://vertigobr.github.io/vkpr
+helm repo add vertigo https://charts.vertigo.com.br
 helm repo update
 helm upgrade -i -f values.yaml -n vkpr vkpr vertigo/vkpr
 ```
@@ -46,20 +46,20 @@ Take a look on docs to check the installation for a more specific scenario.
   
 The **Ingress stack** is dedicated to tools that configure external connections to Kubernetes.
 
-- [NGINX Ingress Controller](https://vertigobr.github.io/vkpr/docs/stacks#nginx-ingress-controller) is a Kubernetes Ingress Controller using NGINX as a reverse proxy and load balancer.
-- [ExternalDNS](https://vertigobr.github.io/vkpr/docs/stacks#externaldns) is a Kubernetes addon that configures public DNS servers with information about services exposed by Kubernetes and making them discoverable.
+- [NGINX Ingress Controller](https://charts.vertigo.com.br/docs/stacks#nginx-ingress-controller) is a Kubernetes Ingress Controller using NGINX as a reverse proxy and load balancer.
+- [ExternalDNS](https://charts.vertigo.com.br/docs/stacks#externaldns) is a Kubernetes addon that configures public DNS servers with information about services exposed by Kubernetes and making them discoverable.
 
 ### Logging stack
 
 The **Logging Stack** is dedicated to distributed logs management tools.
 
-- [Loki](https://vertigobr.github.io/vkpr/docs/stacks#loki) is a horizontally-scalable, highly-available, multi-tenant log aggregation system inspired by Prometheus.
+- [Loki](https://charts.vertigo.com.br/docs/stacks#loki) is a horizontally-scalable, highly-available, multi-tenant log aggregation system inspired by Prometheus.
 
 ### Monitoring stack
 
 The **Monitoring Stack** is dedicated to observation and metrics management tools either for your services, applications or the Kubernetes Cluster.
 
-- [Prometheus Operator](https://vertigobr.github.io/vkpr/docs/stacks#prometheus-operator) provides Kubernetes native deployment and management of Prometheus and related monitoring components. Prometheus Operator contains the following modules:
+- [Prometheus Operator](https://charts.vertigo.com.br/docs/stacks#prometheus-operator) provides Kubernetes native deployment and management of Prometheus and related monitoring components. Prometheus Operator contains the following modules:
   - [Grafana](https://grafana.com/oss/grafana/) allows you to query, visualize and alert on metrics and logs no matter where they are stored.
   - [Prometheus](https://grafana.com/oss/prometheus/) monitoring system includes a rich, multidimensional data model, a concise and powerful query language called PromQL, an efficient embedded timeseries database, and over 150 integrations with third-party systems.
   - [Alertmanager](https://prometheus.io/docs/alerting/latest/alertmanager/) handles alerts sent by client applications such as the Prometheus server.
@@ -68,28 +68,28 @@ The **Monitoring Stack** is dedicated to observation and metrics management tool
 
 The **Security Stack** is dedicated to security tools, like identity and secret management, to your services.
 
-- [cert-manager](https://vertigobr.github.io/vkpr/docs/stacks#cert-manager) is a Kubernetes addon to automate the management and issuance of TLS certificates from various issuing sources.
-- [Vault](https://vertigobr.github.io/vkpr/docs/stacks#vault) secures, stores, and tightly controls access to tokens, passwords, certificates, API keys, and other secrets in modern computing. 
-- [Keycloak](https://vertigobr.github.io/vkpr/docs/stacks#keycloak) is an Open Source Identity and Access Management solution for modern Applications and Services.
+- [cert-manager](https://charts.vertigo.com.br/docs/stacks#cert-manager) is a Kubernetes addon to automate the management and issuance of TLS certificates from various issuing sources.
+- [Vault](https://charts.vertigo.com.br/docs/stacks#vault) secures, stores, and tightly controls access to tokens, passwords, certificates, API keys, and other secrets in modern computing. 
+- [Keycloak](https://charts.vertigo.com.br/docs/stacks#keycloak) is an Open Source Identity and Access Management solution for modern Applications and Services.
 
 ### Backup stack
 
 The **Backup Stack** is dedicated to backup and restore tools in order to migrate Kubernetes cluster's resources and persistent volumes.
 
-- [Velero](https://vertigobr.github.io/vkpr/docs/stacks#velero) is an open source tool to safely backup and restore, perform disaster recovery, and migrate Kubernetes cluster resources and persistent volumes.
+- [Velero](https://charts.vertigo.com.br/docs/stacks#velero) is an open source tool to safely backup and restore, perform disaster recovery, and migrate Kubernetes cluster resources and persistent volumes.
 
 ## Charts version
 
 |                                                 Charts                                            | VKPR 0.7.0 |
 |---------------------------------------------------------------------------------------------------|------------|
-| [cert-manager](https://vertigobr.github.io/vkpr/docs/stacks#cert-manager)                         |  `0.16.0`  |
-| [ExternalDNS](https://vertigobr.github.io/vkpr/docs/stacks#externaldns)                           |  `3.2.2`   |
-| [Loki](https://vertigobr.github.io/vkpr/docs/stacks#loki)                                         |  `0.37.0`  |
-| [Keycloak](https://vertigobr.github.io/vkpr/docs/stacks#keycloak)                                 |  `8.2.2`   |
-| [NGINX Ingress Controller](https://vertigobr.github.io/vkpr/docs/stacks#nginx-ingress-controller) |  `1.34.3`  |
-| [Prometheus Operator](https://vertigobr.github.io/vkpr/docs/stacks#prometheus-operator)           |  `8.12.3`  |
-| [Vault](https://vertigobr.github.io/vkpr/docs/stacks#vault)                                       |  `0.5.0`   |
-| [Velero](https://vertigobr.github.io/vkpr/docs/stacks#velero)                                     |  `2.7.4`   |
+| [cert-manager](https://charts.vertigo.com.br/docs/stacks#cert-manager)                         |  `0.16.0`  |
+| [ExternalDNS](https://charts.vertigo.com.br/docs/stacks#externaldns)                           |  `3.2.2`   |
+| [Loki](https://charts.vertigo.com.br/docs/stacks#loki)                                         |  `0.37.0`  |
+| [Keycloak](https://charts.vertigo.com.br/docs/stacks#keycloak)                                 |  `8.2.2`   |
+| [NGINX Ingress Controller](https://charts.vertigo.com.br/docs/stacks#nginx-ingress-controller) |  `1.34.3`  |
+| [Prometheus Operator](https://charts.vertigo.com.br/docs/stacks#prometheus-operator)           |  `8.12.3`  |
+| [Vault](https://charts.vertigo.com.br/docs/stacks#vault)                                       |  `0.5.0`   |
+| [Velero](https://charts.vertigo.com.br/docs/stacks#velero)                                     |  `2.7.4`   |
 
 ## Requisites
 
