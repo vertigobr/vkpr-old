@@ -11,9 +11,9 @@ VKPR was developed to make Kubernetes easier to use. It is composed of third-par
 The VKPR installation uses [helm](https://helm.sh/):
 
 ```sh
-helm repo add vertigo https://vertigobr.github.io/vkpr
+helm repo add vertigo https://charts.vertigo.com.br
 helm repo update
 helm upgrade -i -f values.yaml -n vkpr vkpr vertigo/vkpr
 ```
 
-Take a look on [docs](https://vertigobr.github.io/vkpr/docs/) to check the installation for a more specific scenario.
+Take a look on [docs](https://charts.vertigo.com.br/docs/) to check the installation for a more specific scenario.

@@ -83,7 +83,7 @@ release_charts() {
 }
 
 update_index() {
-    cr index -o vertigobr -r vkpr -c https://vertigobr.github.io/vkpr
+    cr index -o vertigobr -r vkpr -c https://charts.vertigo.com.br
 
     git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
     git config user.name "$GITHUB_ACTOR"
