@@ -1,6 +1,6 @@
 apiVersion: v2
 name: vkpr
-version: 0.7.1
+version: 0.7.2
 appVersion: v1.4.0
 home: https://github.com/vertigobr/vkpr
 icon: https://vertigo.com.br/wp-content/uploads/favicon.png
@@ -33,7 +33,7 @@ dependencies:
 #
 # LOGGING STACK
 #
-# ELK STACK - COMENTADO
+# ELK STACK
 # - name: fluentd-elasticsearch
 #   repository: https://kiwigrid.github.io
 #   version: 5.3.1
@@ -91,7 +91,7 @@ dependencies:
   ### SECURITY STACK ###
   - name: cert-manager
     repository: https://charts.jetstack.io
-    version: v0.16.0
+    version: v1.0.1
     condition: cert-manager.enabled
 
   - name: keycloak

@@ -80,9 +80,9 @@ The **Backup Stack** is dedicated to backup and restore tools in order to migrat
 
 ## Charts version
 
-|                                                 Charts                                            | VKPR 0.7.0 |
-|---------------------------------------------------------------------------------------------------|------------|
-| [cert-manager](https://charts.vertigo.com.br/docs/stacks#cert-manager)                         |  `0.16.0`  |
+|                                                 Charts                                         | VKPR 0.7.2 |
+|------------------------------------------------------------------------------------------------|------------|
+| [cert-manager](https://charts.vertigo.com.br/docs/stacks#cert-manager)                         |  `1.0.1`   |
 | [ExternalDNS](https://charts.vertigo.com.br/docs/stacks#externaldns)                           |  `3.2.2`   |
 | [Loki](https://charts.vertigo.com.br/docs/stacks#loki)                                         |  `0.37.0`  |
 | [Keycloak](https://charts.vertigo.com.br/docs/stacks#keycloak)                                 |  `8.2.2`   |
