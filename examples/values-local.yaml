@@ -1,8 +1,7 @@
 #
-# Valores para testes com o k3d.
-# Note que o stack ingress foi desabilitado, pois o k3d já embute um Traefik.
+# Valores para testes locais com o k3d.
 #
-# helm upgrade -i -f values-k3d.yaml vkpr ./vkpr
+# helm upgrade -i vkpr -f examples/values-local.yaml ./charts/vkpr
 #
 # Coloque as seguintes entradas no /etc/hosts :
 # 127.0.0.1    whoami.localdomain grafana.localdomain graylog.localdomain
@@ -10,11 +9,13 @@
 # Alguns charts são antigos e falham no k8s >= 1.16. Corrija com:
 # helm plugin install https://github.com/ContainerSolutions/helm-convert 
 #
+# IMPORTANTE: em testes locais, onde o cluster é descartável, recomendamos deixar
+# o Helm criar os CRDs quando o chart permitir.
 
 #
 # INGRESS STACK
 #
-nginx-ingress:
+ingress-nginx:
   enabled: true
   controller:
     service:
@@ -26,6 +27,7 @@ external-dns:
   enabled: false
 cert-manager:
   enabled: false
+  installCRDs: true
 
 # chart values
 ingress:
@@ -86,11 +88,35 @@ loki-stack:
 #
 # MONITORING STACK
 #
-prometheus-operator:
+kube-prometheus-stack:
   enabled: true
+  alertmanager:
+    enabled: false
   prometheusOperator:
-    createCustomResource: false
+    enabled: true
+    manageCrds: true   # ok para ambiente local
+  kubeApiServer:
+    enabled: true
+  kubelet:
+    enabled: true
+  kubeControllerManager:
+    enabled: true
+  coreDns:
+    enabled: true
+  kubeDns:
+    enabled: false
+  kubeEtcd:
+    enabled: true
+  kubeScheduler:
+    enabled: true
+  kubeProxy:
+    enabled: true
+  kubeStateMetrics:
+    enabled: true
+  nodeExporter:
+    enabled: true
   grafana:
+    enabled: false
     image:
       repository: vertigo/grafana
       tag: 7.0.0
@@ -115,11 +141,39 @@ prometheus-operator:
         api_url: http://keycloak.localdomain:32080/auth/realms/vkpr/protocol/openid-connect/userinfo
         allowed_domains: grafana.localdomain keycloak.localdomain
         allow_sign_up: true
+  # deploy prometheus instance
+  prometheus:
+    enabled: true
 
+#
 # SECURITY STACK
 #
-keycloak:
+
+#
+# Vault:
+# É preciso inicializar e fazer unseal
+# https://learn.hashicorp.com/tutorials/vault/kubernetes-raft-deployment-guide#initialize-and-unseal-vault
+# Resumo:
+# kubectl get pods -l app.kubernetes.io/name=vault
+# kubectl exec -ti vkpr-vault-0 -- vault operator init
+# kubectl exec -ti vkpr-vault-0 -- vault operator unseal KEY # repetir 3 vezes
+# 
+vault:
   enabled: true
+  server:
+    ha:
+      enabled: true
+      raft:
+        enabled: true
+      replicas: 1
+    ingress:
+      enabled: true
+      hosts:
+        - host: vault.localdomain
+          path: ["/"]
+
+keycloak:
+  enabled: false
   prometheus:
     operator:
       enabled: true
