@@ -1,5 +1,16 @@
 # Release Notes
 
+## Version 0.8.1 - 2020-10-21
+
+Upgrades:
+
+- keycloak: 9.4.0
+
+Improvements:
+
+- Added a sample test case for deploying Keycloak on a local environment.
+  - Look at the keycloak_local target on the makefile
+
 ## Version 0.8.0 - 2020-10-15
 
 Upgrades:

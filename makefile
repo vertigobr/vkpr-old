@@ -85,3 +85,10 @@ vault_k8s_config:
 
 vault_k8s_role:
 	vault write auth/kubernetes/role/issuer bound_service_account_names=issuer bound_service_account_namespaces=default policies=pki ttl=20m
+
+## Run keycloak locally with k3d
+keycloak_local:
+	k3d cluster create vkpr-local -p "8080:80@loadbalancer" -p "8443:443@loadbalancer" --k3s-server-arg "--no-deploy=traefik"
+	export KUBECONFIG=$(k3d kubeconfig write vkpr-local)
+	kubectl create secret generic realm-secret --from-file=examples/keycloak/realm.json
+	helm upgrade -i vkpr --skip-crds -f examples/local/values-local-keycloak.yaml ./charts/vkpr

@@ -1,0 +1,72 @@
+
+#
+# INGRESS STACK
+#
+ingress-nginx:
+  enabled: true
+    #     http: 32080
+
+external-dns:
+  enabled: false
+cert-manager:
+  enabled: false
+
+# chart values
+ingress:
+  enabled: true
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+  hosts:
+  - host: whoami.localdomain
+    paths: ["/"]
+
+#
+# LOGGING STACK:
+#
+
+loki-stack:
+  enabled: false
+
+#
+# MONITORING STACK
+#
+kube-prometheus-stack:
+  enabled: false
+
+#
+# SECURITY STACK
+#
+vault:
+  enabled: false
+
+keycloak:
+  enabled: true
+  rbac:
+    create: true
+  username: keycloak
+  password: vert1234
+  postgresql:
+    enabled: true	
+  ingress:
+    enabled: true
+    tls: []
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    rules:
+      - host: "keycloak.localdomain"
+        paths: ["/"]
+  extraVolumes: |
+    - name: realm-secret
+      secret:
+        secretName: realm-secret
+  extraVolumeMounts: |
+    - name: realm-secret
+      mountPath: "/realm/"
+      readOnly: true
+  extraEnv: |
+    - name: KEYCLOAK_IMPORT
+      value: /realm/realm.json
+    - name: KEYCLOAK_USER
+      value: admin
+    - name: KEYCLOAK_PASSWORD
+      value: vert1234
