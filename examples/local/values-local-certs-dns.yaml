@@ -1,0 +1,94 @@
+#
+# Valores para testes locais com o k3d, mas com Cert-manager e External-DNS operando
+# via DigitalOcean.
+#
+# O que executa:
+# - Ingress controller (ingress-nginx)
+# - Aplicação "whoami" com nome DNS real
+# - Cert-Manager
+# - External-DNS
+#
+# kubectl create secret generic digitalocean-dns --from-literal=access-token=<TOKEN>
+# helm upgrade -i vkpr --skip-crds -f examples/local/values-local-certs-dns.yaml ./charts/vkpr \
+#   --set external-dns.digitalocean.apiToken=<TOKEN>
+# kubectl apply -f examples/local/acme.yaml
+#
+# Testar com:
+#
+# curl -k -H "Host: whoami.vkpr-dev.vertigo.com.br" https://<EXTERNAL-IP>
+# curl -k https://whoami.vkpr-dev.vertigo.com.br
+#
+
+#
+# INGRESS STACK
+#
+ingress-nginx:
+  enabled: true
+
+external-dns:
+  enabled: true
+  rbac:
+    create: true
+  sources:
+  - ingress
+  provider: digitalocean
+  # provide no value here, use --set in command line
+  # digitalocean:
+  #   apiToken: <API-TOKEN>
+  interval: "1m"
+  logLevel: debug
+
+cert-manager:
+  enabled: true
+  installCRDs: true # ok for testing
+  ingressShim:
+    defaultIssuerName: letsencrypt-staging
+    defaultIssuerKind: ClusterIssuer
+    defaultIssuerGroup: cert-manager.io
+  prometheus:
+    enabled: false
+
+# dados para o CRD do ACME
+# acme:
+#   email: andre@vertigo.com.br
+#   solvers:
+#   - dns01:
+#       digitalocean:
+#         tokenSecretRef:
+#           name: digitalocean-dns
+#           key: access-token
+
+# chart values
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+  hosts:
+  - host: whoami.vkpr-dev.vertigo.com.br
+    paths: ["/"]
+  tls:
+  - hosts:
+    - whoami.vkpr-dev.vertigo.com.br
+    secretName: whoami-cert
+
+#
+# LOGGING STACK:
+#
+
+loki-stack:
+  enabled: false
+
+#
+# MONITORING STACK
+#
+kube-prometheus-stack:
+  enabled: false
+
+#
+# SECURITY STACK
+#
+vault:
+  enabled: false
+keycloak:
+  enabled: false
