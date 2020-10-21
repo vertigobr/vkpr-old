@@ -80,16 +80,16 @@ The **Backup Stack** is dedicated to backup and restore tools in order to migrat
 
 ## Charts version
 
-|                                                 Charts                                         | VKPR 0.7.2 |
+|                                                 Charts                                         | VKPR 0.8.0 |
 |------------------------------------------------------------------------------------------------|------------|
-| [cert-manager](https://charts.vertigo.com.br/docs/stacks#cert-manager)                         |  `1.0.1`   |
-| [ExternalDNS](https://charts.vertigo.com.br/docs/stacks#externaldns)                           |  `3.2.2`   |
-| [Loki](https://charts.vertigo.com.br/docs/stacks#loki)                                         |  `0.37.0`  |
+| [cert-manager](https://charts.vertigo.com.br/docs/stacks#cert-manager)                         |  `1.0.3`   |
+| [ExternalDNS](https://charts.vertigo.com.br/docs/stacks#externaldns)                           |  `3.4.9`   |
+| [Loki](https://charts.vertigo.com.br/docs/stacks#loki)                                         |  `0.41.2`  |
 | [Keycloak](https://charts.vertigo.com.br/docs/stacks#keycloak)                                 |  `8.2.2`   |
-| [NGINX Ingress Controller](https://charts.vertigo.com.br/docs/stacks#nginx-ingress-controller) |  `1.34.3`  |
-| [Prometheus Operator](https://charts.vertigo.com.br/docs/stacks#prometheus-operator)           |  `8.12.3`  |
-| [Vault](https://charts.vertigo.com.br/docs/stacks#vault)                                       |  `0.5.0`   |
-| [Velero](https://charts.vertigo.com.br/docs/stacks#velero)                                     |  `2.7.4`   |
+| [NGINX Ingress Controller](https://charts.vertigo.com.br/docs/stacks#nginx-ingress-controller) |  `3.7.1`  |
+| [Kube Prometheus Stack](https://charts.vertigo.com.br/docs/stacks#prometheus-operator)         |  `10.1.0`  |
+| [Vault](https://charts.vertigo.com.br/docs/stacks#vault)                                       |  `0.7.0`   |
+| [Velero](https://charts.vertigo.com.br/docs/stacks#velero)                                     |  `2.13.3`   |
 
 ## Requisites
 

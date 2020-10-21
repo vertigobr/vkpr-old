@@ -3,10 +3,20 @@
 # Declare variables to be passed into your templates.
 
 # subchart defaults
-nginx-ingress:
+ingress-nginx:
   enabled: true
   controller:
     electionID: vkpr-ingress-controller-leader
+    publishService:
+      enabled: true
+    autoscaling:
+      enabled: false
+
+# old chart (former stable repo)
+# nginx-ingress:
+#   enabled: true
+#   controller:
+#     electionID: vkpr-ingress-controller-leader
 
 external-dns:
   enabled: false
@@ -14,7 +24,7 @@ external-dns:
 
 cert-manager:
   enabled: false
-  installCRDs: true
+  installCRDs: false
 
 graylog:
   enabled: false
@@ -29,12 +39,17 @@ vault:
   enabled: false
 
 loki-stack:
-  enabled: true
+  enabled: false
 
-prometheus-operator:
-  enabled: true
+kube-prometheus-stack:
+  enabled: false
   prometheusOperator:
     createCustomResource: false
+
+# prometheus-operator:
+#   enabled: true
+#   prometheusOperator:
+#     createCustomResource: false
 
 # dados para o CRD do ACME
 acme:
@@ -117,10 +132,10 @@ affinity: {}
 # BACKUP STACK
 velero:
   enabled: false
-  image:
-    repository: velero/velero
-    tag: v1.2.0
-    pullPolicy: IfNotPresent
+  # image:
+  #   repository: velero/velero
+  #   tag: v1.2.0
+  #   pullPolicy: IfNotPresent
   # Annotations to add to the Velero deployment's pod template. Optional.
   #
   # If using kube2iam or kiam, use the following annotation with your AWS_ACCOUNT_ID
@@ -167,7 +182,7 @@ velero:
       enabled: true
       additionalLabels: {}
   # Install CRDs as a templates. Enabled by default.
-  installCRDs: true
+  installCRDs: false
 
   ##
   ## End of deployment-related settings.

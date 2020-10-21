@@ -1,0 +1,61 @@
+#
+# Valores para testes locais com o k3d.
+# 
+# O que executa:
+# - Ingress controller (ingress-nginx)
+# - Aplicação "whoami"
+#
+# helm upgrade -i vkpr -f examples/local/values-local-minimal.yaml ./charts/vkpr
+#
+# Coloque as seguintes entradas no /etc/hosts :
+# 127.0.0.1    whoami.localdomain
+#
+# Testar com:
+#
+# curl whoami.localdomain:8080
+#
+
+#
+# INGRESS STACK
+#
+ingress-nginx:
+  enabled: true
+    # service:
+    #   type: NodePort
+    #   nodePorts:
+    #     http: 32080
+
+external-dns:
+  enabled: false
+cert-manager:
+  enabled: false
+
+# chart values
+ingress:
+  enabled: true
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+  hosts:
+  - host: whoami.localdomain
+    paths: ["/"]
+
+#
+# LOGGING STACK:
+#
+
+loki-stack:
+  enabled: false
+
+#
+# MONITORING STACK
+#
+kube-prometheus-stack:
+  enabled: false
+
+#
+# SECURITY STACK
+#
+vault:
+  enabled: false
+keycloak:
+  enabled: false
