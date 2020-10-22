@@ -1,10 +1,27 @@
+#
+# Valores para testes locais com o k3d.
+# 
+# O que executa:
+# - Ingress controller (ingress-nginx)
+# - Aplicação "whoami"
+# - Keycloak
+#
+# kubectl create secret generic vkpr-realm-secret --from-file=examples/keycloak/realms/realm.json
+# helm upgrade -i vkpr --skip-crds -f examples/local/values-local-keycloak.yaml ./charts/vkpr
+#
+# Coloque as seguintes entradas no /etc/hosts :
+# 127.0.0.1    keycloak.localdomain
+#
+# Abrir a seguinte URL no browser:
+#
+# 
+#
 
 #
 # INGRESS STACK
 #
 ingress-nginx:
   enabled: true
-    #     http: 32080
 
 external-dns:
   enabled: false
@@ -43,10 +60,8 @@ keycloak:
   enabled: true
   rbac:
     create: true
-  username: keycloak
-  password: vert1234
   postgresql:
-    enabled: true	
+    enabled: false
   ingress:
     enabled: true
     tls: []
@@ -55,14 +70,22 @@ keycloak:
     rules:
       - host: "keycloak.localdomain"
         paths: ["/"]
+  # mounts realm.json as secret
+  # mounts volume as H2 database (when no postgres is used)
   extraVolumes: |
-    - name: realm-secret
+    - name: vkpr-realm-secret
       secret:
-        secretName: realm-secret
+        secretName: vkpr-realm-secret
+    - name: keycloak-data
+      persistentVolumeClaim:
+        claimName: keycloak-data-volume
   extraVolumeMounts: |
-    - name: realm-secret
+    - name: vkpr-realm-secret
       mountPath: "/realm/"
       readOnly: true
+    - name: keycloak-data
+      mountPath: "/opt/jboss/keycloak/standalone/data"
+      readOnly: false
   extraEnv: |
     - name: KEYCLOAK_IMPORT
       value: /realm/realm.json

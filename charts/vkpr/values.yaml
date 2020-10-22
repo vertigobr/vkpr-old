@@ -31,9 +31,14 @@ graylog:
 
 keycloak:
   enabled: false
-  keycloak:
-    persistence:
-      dbVendor: h2
+  # postgresql - enables subchart
+  # keep disabled to use external database (like RDS) - this is the recommended option
+  # https://artifacthub.io/packages/helm/codecentric/keycloak
+  # Keycloak will fallback to H2 local file-based DB if no `DB_VENDOR` is informed
+  # H2 located at "/opt/jboss/keycloak/standalone/data"
+  # Mounting it into a PVC can be done, but it should only be ok for single instance.
+  postgresql:
+    enabled: false
 
 vault:
   enabled: false
