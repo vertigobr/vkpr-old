@@ -88,7 +88,7 @@ The **Backup Stack** is dedicated to backup and restore tools in order to migrat
 | [Keycloak](https://charts.vertigo.com.br/docs/stacks#keycloak)                                 |  `9.4.0`   |
 | [NGINX Ingress Controller](https://charts.vertigo.com.br/docs/stacks#nginx-ingress-controller) |  `3.7.1`  |
 | [Kube Prometheus Stack](https://charts.vertigo.com.br/docs/stacks#prometheus-operator)         |  `10.1.0`  |
-| [Vault](https://charts.vertigo.com.br/docs/stacks#vault)                                       |  `0.7.0`   |
+| [Vault](https://charts.vertigo.com.br/docs/stacks#vault)                                       |  `0.8.0`   |
 | [Velero](https://charts.vertigo.com.br/docs/stacks#velero)                                     |  `2.13.3`   |
 
 ## Requisites

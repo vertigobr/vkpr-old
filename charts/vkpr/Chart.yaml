@@ -101,7 +101,7 @@ dependencies:
 
   - name: vault
     repository: https://helm.releases.hashicorp.com
-    version: 0.7.0
+    version: 0.8.0
     condition: vault.enabled
 
   ### BACKUP STACK ###

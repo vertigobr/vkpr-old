@@ -1,0 +1,92 @@
+# This file is used to define the values required for integrating Keycloak and Vault
+
+#
+# INGRESS STACK
+#
+ingress-nginx:
+    enabled: true
+  
+external-dns:
+    enabled: false
+
+cert-manager:
+    enabled: false
+  
+# chart values
+ingress:
+  enabled: true
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+  hosts:
+  - host: whoami.localdomain
+    paths: ["/"]
+  
+  #
+  # LOGGING STACK:
+  #
+  
+  loki-stack:
+    enabled: false
+  
+  #
+  # MONITORING STACK
+  #
+  kube-prometheus-stack:
+    enabled: false
+  
+  #
+  # SECURITY STACK
+  #
+  vault:
+    enabled: true
+    server:
+      ha:
+        enabled: true
+        raft:
+          enabled: true
+        replicas: 1
+      ingress:
+        enabled: true
+        hosts:
+          - host: vault.localdomain
+            path: ["/"]          
+  
+  keycloak:
+    enabled: true
+    rbac:
+      create: true
+    postgresql:
+      enabled: false
+    ingress:
+      enabled: true
+      tls: []
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      rules:
+        - host: "keycloak.localdomain"
+          paths: ["/"]
+    # mounts realm.json as secret
+    # mounts volume as H2 database (when no postgres is used)
+    extraVolumes: |
+      - name: vkpr-realm-secret
+        secret:
+          secretName: vkpr-realm-secret
+      - name: keycloak-data
+        persistentVolumeClaim:
+          claimName: keycloak-data-volume
+    extraVolumeMounts: |
+      - name: vkpr-realm-secret
+        mountPath: "/realm/"
+        readOnly: true
+      - name: keycloak-data
+        mountPath: "/opt/jboss/keycloak/standalone/data"
+        readOnly: false
+    extraEnv: |
+      - name: KEYCLOAK_IMPORT
+        value: /realm/realm.json
+      - name: KEYCLOAK_USER
+        value: admin
+      - name: KEYCLOAK_PASSWORD
+        value: vert1234
+
+        
