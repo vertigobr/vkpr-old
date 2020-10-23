@@ -12,13 +12,15 @@
 # - Keycloak
 # - Vault
 #
+# Seguir os passos pela UI: https://learn.hashicorp.com/tutorials/vault/oidc-auth
+#
 # VAULT
 # 1. É preciso inicializar e fazer unseal do Vault:
 #
 # https://learn.hashicorp.com/tutorials/vault/kubernetes-raft-deployment-guide#initialize-and-unseal-vault
 # Resumo:
 # kubectl get pods -l app.kubernetes.io/name=vault
-# kubectl exec -ti vkpr-vault-0 -- vault operator init -key-shares=3 -key-threshold=1
+# kubectl exec -ti vkpr-vault-0 -- vault operator init -key-shares=1 -key-threshold=1
 # kubectl exec -ti vkpr-vault-0 -- vault operator unseal KEY
 #
 # 2. Criar policy "reader" (via UI, descobrir como fazer via CLI no kubectl exec)
@@ -26,6 +28,16 @@
 # path "/secret/*" {
 #    capabilities = ["read", "list"]
 # }
+
+# vault policy write reader path <<EOF  >> reader.hcl
+# "/secret/*" {
+#     capabilities = ["read", "list"]
+#  } 
+#  EOF 
+
+# kubectl cp  
+#
+# kubectl exec -ti vkpr-vault-0 -- vault policy write reader reader.hcl
 #
 # 3. Criar oidc auth method
 #
@@ -35,6 +47,8 @@
 #        oidc_client_id="oidc-demo" \
 #        oidc_client_secret="60e50da1-b492-4995-9574-763fa285456c" \
 #        default_role="reader"
+#
+# Provider config: {}
 #
 # 4. Criar role "reader":
 #
@@ -68,7 +82,7 @@ cert-manager:
   enabled: true
   installCRDs: true # ok for testing
   ingressShim:
-    defaultIssuerName: letsencrypt-production
+    defaultIssuerName: letsencrypt-staging
     defaultIssuerKind: ClusterIssuer
     defaultIssuerGroup: cert-manager.io
   prometheus:
