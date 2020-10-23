@@ -96,7 +96,10 @@ keycloak_local_up:
 	echo "Open http://localhost:5443/ on your browser and check integration with keycloak using the login/password defined on the realm"
 
 vault_keycloak_local_up:
-	k3d cluster create vkpr-local -p "8080:80@loadbalancer" -p "8443:443@loadbalancer" --k3s-server-arg "--no-deploy=traefik"
+	k3d cluster create vkpr-local --k3s-server-arg "--no-deploy=traefik"
 	export KUBECONFIG=$(k3d kubeconfig write vkpr-local)
+	kubectl create secret generic digitalocean-dns --from-literal=access-token=${DO_TOKEN}
 	kubectl create secret generic vkpr-realm-secret --from-file=examples/keycloak/realm.json
-	helm upgrade -i vkpr --skip-crds -f examples/local/values-local-vault.yaml ./charts/vkpr
+	helm upgrade -i vkpr --skip-crds -f examples/local/values-local-vault.yaml ./charts/vkpr --set external-dns.digitalocean.apiToken=${DO_TOKEN}
+	sleep 10
+	kubectl apply -f examples/local/acme.yaml

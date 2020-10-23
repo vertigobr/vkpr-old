@@ -7,86 +7,126 @@ ingress-nginx:
     enabled: true
   
 external-dns:
-    enabled: false
+  enabled: true
+  rbac:
+    create: true
+  sources:
+  - ingress
+  provider: digitalocean
+  # provide no value here, use --set in command line
+  # digitalocean:
+  #   apiToken: <API-TOKEN>
+  interval: "1m"
+  logLevel: debug
 
 cert-manager:
+  enabled: true
+  installCRDs: true # ok for testing
+  ingressShim:
+    defaultIssuerName: letsencrypt-production
+    defaultIssuerKind: ClusterIssuer
+    defaultIssuerGroup: cert-manager.io
+  prometheus:
     enabled: false
   
 # chart values
+# ingress:
+#   enabled: true
+#   annotations:
+#     ingress.kubernetes.io/ssl-redirect: "false"
+#   hosts:
+#   - host: whoami.localdomain
+#     paths: ["/"]
 ingress:
   enabled: true
   annotations:
-    ingress.kubernetes.io/ssl-redirect: "false"
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
   hosts:
-  - host: whoami.localdomain
+  - host: whoami.vkpr-dev.vertigo.com.br
     paths: ["/"]
+  tls:
+  - hosts:
+    - whoami.vkpr-dev.vertigo.com.br
+    secretName: whoami-cert
   
-  #
-  # LOGGING STACK:
-  #
-  
-  loki-stack:
-    enabled: false
-  
-  #
-  # MONITORING STACK
-  #
-  kube-prometheus-stack:
-    enabled: false
-  
-  #
-  # SECURITY STACK
-  #
-  vault:
-    enabled: true
-    server:
-      ha:
+#
+# LOGGING STACK:
+#
+
+loki-stack:
+  enabled: false
+
+#
+# MONITORING STACK
+#
+kube-prometheus-stack:
+  enabled: false
+
+#
+# SECURITY STACK
+#
+vault:
+  enabled: true
+  server:
+    ha:
+      enabled: true
+      raft:
         enabled: true
-        raft:
-          enabled: true
-        replicas: 1
-      ingress:
-        enabled: true
-        hosts:
-          - host: vault.localdomain
-            path: ["/"]          
-  
-  keycloak:
-    enabled: true
-    rbac:
-      create: true
-    postgresql:
-      enabled: false
+      replicas: 1
     ingress:
       enabled: true
-      tls: []
       annotations:
         kubernetes.io/ingress.class: nginx
-      rules:
-        - host: "keycloak.localdomain"
-          paths: ["/"]
-    # mounts realm.json as secret
-    # mounts volume as H2 database (when no postgres is used)
-    extraVolumes: |
-      - name: vkpr-realm-secret
-        secret:
-          secretName: vkpr-realm-secret
-      - name: keycloak-data
-        persistentVolumeClaim:
-          claimName: keycloak-data-volume
-    extraVolumeMounts: |
-      - name: vkpr-realm-secret
-        mountPath: "/realm/"
-        readOnly: true
-      - name: keycloak-data
-        mountPath: "/opt/jboss/keycloak/standalone/data"
-        readOnly: false
-    extraEnv: |
-      - name: KEYCLOAK_IMPORT
-        value: /realm/realm.json
-      - name: KEYCLOAK_USER
-        value: admin
-      - name: KEYCLOAK_PASSWORD
-        value: vert1234
+        kubernetes.io/tls-acme: "true"
+      hosts:
+      - host: vault.vkpr-dev.vertigo.com.br
+        path: ["/"]
+      tls:
+      - hosts:
+        - vault.vkpr-dev.vertigo.com.br
+        secretName: vault-cert
+    extraEnvironmentVars:
+      VAULT_LOG_LEVEL: debug
 
-        
+keycloak:
+  enabled: true
+  rbac:
+    create: true
+  postgresql:
+    enabled: false
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+    tls:
+    - hosts:
+      - keycloak.vkpr-dev.vertigo.com.br
+      secretName: keycloak-cert
+    rules:
+    - host: keycloak.vkpr-dev.vertigo.com.br
+      paths: ["/"]
+  # mounts realm.json as secret
+  # mounts volume as H2 database (when no postgres is used)
+  extraVolumes: |
+    - name: vkpr-realm-secret
+      secret:
+        secretName: vkpr-realm-secret
+    - name: keycloak-data
+      persistentVolumeClaim:
+        claimName: keycloak-data-volume
+  extraVolumeMounts: |
+    - name: vkpr-realm-secret
+      mountPath: "/realm/"
+      readOnly: true
+    - name: keycloak-data
+      mountPath: "/opt/jboss/keycloak/standalone/data"
+      readOnly: false
+  extraEnv: |
+    - name: KEYCLOAK_IMPORT
+      value: /realm/realm.json
+    - name: KEYCLOAK_USER
+      value: admin
+    - name: KEYCLOAK_PASSWORD
+      value: vert1234
