@@ -124,6 +124,8 @@ keycloak:
       mountPath: "/opt/jboss/keycloak/standalone/data"
       readOnly: false
   extraEnv: |
+    - name: PROXY_ADDRESS_FORWARDING
+      value: "true"
     - name: KEYCLOAK_IMPORT
       value: /realm/realm.json
     - name: KEYCLOAK_USER
