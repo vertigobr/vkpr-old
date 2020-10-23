@@ -1,4 +1,49 @@
 # This file is used to define the values required for integrating Keycloak and Vault
+#
+# Valores para testes locais com k3d do Vault autenticando contra o Keycloak via OpenID,
+# usando nomes DNS e certificados reais via Cert-manager e External-DNS operando
+# via DigitalOcean (contudo com o IP da rede bridge local).
+#
+# O que executa:
+# - Ingress controller (ingress-nginx)
+# - Aplicação "whoami" com nome DNS real
+# - Cert-Manager
+# - External-DNS
+# - Keycloak
+# - Vault
+#
+# VAULT
+# 1. É preciso inicializar e fazer unseal do Vault:
+#
+# https://learn.hashicorp.com/tutorials/vault/kubernetes-raft-deployment-guide#initialize-and-unseal-vault
+# Resumo:
+# kubectl get pods -l app.kubernetes.io/name=vault
+# kubectl exec -ti vkpr-vault-0 -- vault operator init -key-shares=3 -key-threshold=1
+# kubectl exec -ti vkpr-vault-0 -- vault operator unseal KEY
+#
+# 2. Criar policy "reader" (via UI, descobrir como fazer via CLI no kubectl exec)
+#
+# path "/secret/*" {
+#    capabilities = ["read", "list"]
+# }
+#
+# 3. Criar oidc auth method
+#
+# kubectl exec -ti vkpr-vault-0 -- vault auth enable oidc
+# kubectl exec -ti vkpr-vault-0 -- vault write auth/oidc/config \
+#        oidc_discovery_url="https://keycloak.vkpr-dev.vertigo.com.br/auth/realms/vkpr" \
+#        oidc_client_id="oidc-demo" \
+#        oidc_client_secret="60e50da1-b492-4995-9574-763fa285456c" \
+#        default_role="reader"
+#
+# 4. Criar role "reader":
+#
+# kubectl exec -ti vkpr-vault-0 -- vault write auth/oidc/role/reader \
+#   bound_audiences="oidc-demo" \
+#   allowed_redirect_uris="https://vault.vkpr-dev.vertigo.com.br/ui/vault/auth/oidc/oidc/callback" \
+#   allowed_redirect_uris="http://localhost:8250/oidc/callback" \
+#   user_claim="sub" policies="reader"
+#
 
 #
 # INGRESS STACK
