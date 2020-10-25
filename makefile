@@ -13,8 +13,30 @@ del:
 secret_del:
 	kubectl delete secret vkpr-realm-secret -n vkpr
 	rm ./vkpr-realm.json
+
 ## VAULT SETUP ##
 
+vault_init_http:
+	kubectl exec vkpr-vault-0 -- vault operator init -key-shares=1 -key-threshold=1 -format=json > init-keys.json
+	kubectl exec vkpr-vault-0 -- vault operator unseal $$(cat init-keys.json | jq -r ".unseal_keys_b64[]")
+
+VAULT_ADDR := http://vkpr-vault.default.svc
+vault_setup_http:
+	vault login $$(cat init-keys.json | jq -r ".root_token")
+	echo 'path "/secret/*" { capabilities = ["read", "list"] }' | vault policy write reader -
+	vault auth enable oidc
+	vault write auth/oidc/config \
+		oidc_discovery_url="http://vkpr-keycloak-http.default.svc/auth/realms/vkpr" \
+		oidc_client_id="oidc-demo" \
+		oidc_client_secret="60e50da1-b492-4995-9574-763fa285456c" \
+		default_role="reader"
+	vault write auth/oidc/role/reader \
+		bound_audiences="oidc-demo" \
+		allowed_redirect_uris="http://vkpr-vault.default.svc/ui/vault/auth/oidc/oidc/callback" \
+		allowed_redirect_uris="http://localhost:8250/oidc/callback" \
+		user_claim="sub" policies="reader"
+
+# abaixo foi Kayke
 vault_init_dev:
 	kubectl exec vkpr-vault-0 -n vkpr -- vault operator init -key-shares=1 -key-threshold=1 -format=json > init-keys.json
 	kubectl exec -n vkpr vkpr-vault-0 -- vault operator unseal $$(cat init-keys.json | jq -r ".unseal_keys_b64[]")
@@ -97,10 +119,33 @@ keycloak_local_up:
 
 vault_keycloak_local_up:
 	k3d cluster create vkpr-local --k3s-server-arg "--no-deploy=traefik"
-	export KUBECONFIG=$(k3d kubeconfig write vkpr-local)
+	export KUBECONFIG=$$(k3d kubeconfig write vkpr-local)
 	kubectl create secret generic digitalocean-dns --from-literal=access-token=${DO_TOKEN}
 	kubectl create secret generic vkpr-realm-secret --from-file=examples/keycloak/realm.json
 	helm upgrade -i vkpr --skip-crds -f examples/local/values-local-vault.yaml ./charts/vkpr --set external-dns.digitalocean.apiToken=${DO_TOKEN}
+
+vault_keycloak_local_http_up:
+	k3d cluster create vkpr-local --k3s-server-arg "--no-deploy=traefik"
+	export KUBECONFIG=$$(k3d kubeconfig write vkpr-local)
+	kubectl create secret generic vkpr-realm-secret --from-file=examples/keycloak/realm.json
+	helm upgrade -i vkpr --skip-crds -f examples/local/values-local-vault-http.yaml ./charts/vkpr
+	echo "Detecting LoadBalancer external IP"
+	export LB_IP=""; \
+	while [ -z "$${LB_IP}" ]; do \
+		export LB_IP=$$(kubectl get svc vkpr-ingress-nginx-controller -o jsonpath="{.status.loadBalancer.ingress[*].ip}"); \
+		if [ -z "$${LB_IP}" ]; then \
+			echo "Waiting for LoadBalancer external IP..."; \
+			sleep 3; \
+		else \
+			echo "LoadBalancer external IP: $${LB_IP}"; \
+			echo "Hacking into /etc/hosts, gonna need sudo, please."; \
+			if grep -q "vkpr-keycloak-http" /etc/hosts; then \
+				sudo sed "s/.*vkpr-keycloak-http.*/$${LB_IP} vkpr-vault.default.svc vkpr-keycloak-http.default.svc/g" -i /etc/hosts; \
+			else \
+				sudo sh -c 'echo "$${LB_IP} vkpr-vault.default.svc vkpr-keycloak-http.default.svc" >> /etc/hosts'; \
+			fi; \
+		fi; \
+	done
 
 vault_keycloak_local_configure:
 	kubectl apply -f examples/local/acme.yaml
