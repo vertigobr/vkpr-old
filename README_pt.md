@@ -3,15 +3,15 @@
 ![Release Helm chart](https://github.com/vertigobr/vkpr/workflows/Release%20Helm%20chart/badge.svg)
 # VKPR - Vertigo Kubernetes Production Runtime
 
-VKPR is inspired in the [BKPR project](https://github.com/bitnami/kube-prod-runtime) but it's handed over through Helm chart.
+O VKPR é inspirado no [projeto BKPR](https://github.com/bitnami/kube-prod-runtime) da Bitnami, mas é implementado puramente com Helm charts.
 
-[&#x1f1e7;&#x1f1f7; English](README.md) [&#x1f1e7;&#x1f1f7; Português](README_pt.md)
+[&#x1f1fa;&#x1f1f8; &#x1f1ec;&#x1f1e7; English](README.md) | [&#x1f1e7;&#x1f1f7; &#x1f1f5;&#x1f1f9; Português](README_pt.md)
 
-## Description
+## Descrição
 
-VKPR was developed to make Kubernetes easier to use. It is composed of third-party sets, organized to deliver a production-ready Kubernetes with minimal effort.
+O VKPR foi criado para simplificar a adoção de Kubernetes. Ele é composto por charts de terceiros, organizados de forma a suportar o uso de Kubernetes em produção com mínimo esforço.
 
-The project is structured in stacks that group products with correlative objective. At the moment, these are the available stacks:
+O VKPR está estruturado em pilhas (*stacks*) que agrupam componentes que suportam uma funcionalidade correlata. As *stacks* atuais são:
 
 - **[Ingress stack](#ingress-stack):**
   - NGINX Ingress Controller
@@ -30,7 +30,7 @@ The project is structured in stacks that group products with correlative objecti
 - **[Backup stack](#backup-stack):**
   - Velero
 
-## Installation
+## Instalação
 
 The VKPR installation uses [helm](https://helm.sh/):
 

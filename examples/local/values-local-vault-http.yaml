@@ -9,9 +9,6 @@
 # - Keycloak
 # - Vault
 #
-# kubectl create secret generic vkpr-realm-secret --from-file=examples/keycloak/realms/realm.json
-# helm upgrade -i vkpr --skip-crds -f examples/local/values-local-vault-http.yaml ./charts/vkpr
-#
 # INSTALAÇÃO COM MAKEFILE:
 #
 # make vault_keycloak_local_http_up
@@ -19,6 +16,9 @@
 # make vault_setup_http
 #
 # INSTALAÇÃO VIA CLI (manual):
+#
+# kubectl create secret generic vkpr-realm-secret --from-file=examples/keycloak/realms/realm.json
+# helm upgrade -i vkpr --skip-crds -f examples/local/values-local-vault-http.yaml ./charts/vkpr
 #
 # Se preferir seguir os passos abaixo pela UI: https://learn.hashicorp.com/tutorials/vault/oidc-auth
 #
