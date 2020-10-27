@@ -11,7 +11,7 @@ VKPR is inspired in the [BKPR project](https://github.com/bitnami/kube-prod-runt
 
 VKPR was developed to make Kubernetes easier to use. It is composed of third-party sets, organized to deliver a production-ready Kubernetes with minimal effort.
 
-The project is structured in stacks that group products with correlative objective. At the moment, these are the available stacks:
+The project is structured in stacks that group products with correlated objective. At the moment, these are the available stacks:
 
 - **[Ingress stack](#ingress-stack):**
   - NGINX Ingress Controller

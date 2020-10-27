@@ -32,7 +32,7 @@ O VKPR está estruturado em pilhas (*stacks*) que agrupam componentes que suport
 
 ## Instalação
 
-The VKPR installation uses [helm](https://helm.sh/):
+A instalação do VKPR usa o [helm](https://helm.sh/):
 
 ```sh
 helm repo add vertigo https://charts.vertigo.com.br
