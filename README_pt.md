@@ -80,24 +80,25 @@ O **Backup Stack** foca em ferramentas de backup e restore que auxiliam na migra
 
 - [Velero](https://charts.vertigo.com.br/docs/stacks#velero) é uma ferramenta de código aberto para backup e restore de clusters Kubernetes, sendo útil para *disaster recovery* e/ou migração de clusters e seus recursos.
 
-## Charts version
+## Versões dos charts
 
 <!-- @import "VERSIONS.md" -->
+Veja [Versões dos Charts e Subchart do VKPR](VERSIONS.md).
 
-## Requisites
+## Requisitos
 
 - Kubernetes >= 1.15
 - Helm >= 3
 
-## Contributing
+## Contribuindo
 
-Pull requests/Merge Requests are welcome! Please open an issue first and discuss with us about the proposing changes and be sure to perform tests in a proper way.
+Pull requests e Merge Requests são bem-vindos! Por favor, primeiro abra uma issue e discuta conosco sobre a mudança proposta e tenha certeza que a testou previamente.
 
-## Support
+## Suporte
 
-The support will be made by opening *Issues*. 
-For corporate support, contact us.
+O suporte à comunidade se dará através de issues abertas.
+Para suporte corporativo entre em contato com comercial@vertigo.com.br.
 
-## License
+## Licença
 
-VKPR is licensed under the [Apache License Version 2.0](LICENSE).
+VKPR é licenciado via [Apache License Version 2.0](LICENSE).

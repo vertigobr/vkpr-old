@@ -83,6 +83,7 @@ The **Backup Stack** is dedicated to backup and restore tools in order to migrat
 ## Charts version
 
 <!-- @import "VERSIONS.md" -->
+See [VKPR Chart and Subchart versions](VERSIONS.md).
 
 ## Requisites
 
