@@ -2,6 +2,10 @@
 # Valores para testes locais com o k3d, mas com Cert-manager e External-DNS operando
 # via DigitalOcean.
 #
+# Este exemplo assume que <TOKEN> pode modificar um domínio "vkpr-dev.vertigo.com.br"
+# gerenciado pela DigitalOcean. Importante compreender que o DNS irá resolver para um
+# IP de rede local (o External-Ip do load balancer no k3d).
+#
 # O que executa:
 # - Ingress controller (ingress-nginx)
 # - Aplicação "whoami" com nome DNS real

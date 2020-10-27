@@ -5,12 +5,23 @@
 # - Ingress controller (ingress-nginx)
 # - Aplicação "whoami"
 #
+#
+# INSTALAÇÃO COM MAKEFILE:
+#
+# make k3d_create
+# make example_local_minimal
+#
+#
+# INSTALAÇÃO VIA HELM (manual):
+#
 # helm upgrade -i vkpr -f examples/local/values-local-minimal.yaml ./charts/vkpr
+#
+# TESTAR:
 #
 # Coloque as seguintes entradas no /etc/hosts :
 # 127.0.0.1    whoami.localdomain
 #
-# Testar com:
+# Testar via curl:
 #
 # curl whoami.localdomain:8080
 #

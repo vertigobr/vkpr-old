@@ -6,17 +6,17 @@ services:
     ports:
       - 5443:5443
     environment:
-      - AUTHORIZATION_ENDPOINT=http://keycloak.localdomain:8080/auth/realms/vkpr/protocol/openid-connect/auth
-      - TOKEN_ENDPOINT=http://keycloak.localdomain:8080/auth/realms/vkpr/protocol/openid-connect/token
+      - ISSUER=http://keycloak.localdomain:8080/auth/realms/vkpr
       - LOGOUT_ENDPOINT=http://keycloak.localdomain:8080/auth/realms/vkpr/protocol/openid-connect/logout
-      - JWKS_URI=http://keycloak.localdomain:8080/auth/realms/vkpr/protocol/openid-connect/certs
-      - REGISTRATION_ENDPOINT=http://keycloak.localdomain:8080/auth/realms/vkpr/clients-registrations/openid-connect
       - DISABLE_HTTPS=true
       - REVOCATION_ENDPOINT=
-      - ISSUER=http://keycloak.localdomain:8080/auth/realms/vkpr
       - CLIENT_ID=oidc-demo
       - CLIENT_SECRET=60e50da1-b492-4995-9574-763fa285456c
       - REDIRECT_URI=http://localhost:5443/callback
       - BASE_URL=http://localhost:5443
       - VERIFY_SSL_SERVER=false
       - DEBUG=true
+      #- JWKS_URI=http://keycloak.localdomain:8080/auth/realms/vkpr/protocol/openid-connect/certs
+      #- REGISTRATION_ENDPOINT=http://keycloak.localdomain:8080/auth/realms/vkpr/clients-registrations/openid-connect
+      #- AUTHORIZATION_ENDPOINT=http://keycloak.localdomain:8080/auth/realms/vkpr/protocol/openid-connect/auth
+      #- TOKEN_ENDPOINT=http://keycloak.localdomain:8080/auth/realms/vkpr/protocol/openid-connect/token

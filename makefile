@@ -14,6 +14,34 @@ secret_del:
 	kubectl delete secret vkpr-realm-secret -n vkpr
 	rm ./vkpr-realm.json
 
+KUBECONFIG := $(shell sh -c "k3d kubeconfig write vkpr-local")
+
+k3d_create:
+	k3d cluster create vkpr-local -p "8080:80@loadbalancer" -p "8443:443@loadbalancer" --k3s-server-arg "--no-deploy=traefik"
+
+k3d_delete:
+	k3d cluster delete vkpr-local
+	
+k3d_info:
+	@echo "KUBECONFIG = $(KUBECONFIG)"
+	kubectl cluster-info
+
+## EXEMPLOS LOCAIS
+
+example_local_minimal:
+	@echo "KUBECONFIG = $(KUBECONFIG)"
+	helm upgrade -i vkpr -f examples/local/values-local-minimal.yaml ./charts/vkpr
+	@echo "curl whoami.localdomain:8080"
+
+example_local_keycloak:
+	@echo "KUBECONFIG = $(KUBECONFIG)"
+	kubectl create secret generic vkpr-realm-secret --from-file=examples/keycloak/realm.json
+	helm upgrade -i vkpr --skip-crds -f examples/local/values-local-keycloak.yaml ./charts/vkpr
+	docker-compose -f examples/keycloak/docker-compose.yml up -d
+	@echo "------ DONE ------"
+	@echo "Browser OIDC login test:"
+	@echo "Open http://localhost:5443/ on your browser and check integration with keycloak using the login/password defined on the realm"
+
 ## VAULT SETUP ##
 
 vault_init_http:
@@ -107,15 +135,6 @@ vault_k8s_config:
 
 vault_k8s_role:
 	vault write auth/kubernetes/role/issuer bound_service_account_names=issuer bound_service_account_namespaces=default policies=pki ttl=20m
-
-## Run keycloak locally with k3d
-keycloak_local_up:
-	k3d cluster create vkpr-local -p "8080:80@loadbalancer" -p "8443:443@loadbalancer" --k3s-server-arg "--no-deploy=traefik"
-	export KUBECONFIG=$(k3d kubeconfig write vkpr-local)
-	kubectl create secret generic vkpr-realm-secret --from-file=examples/keycloak/realm.json
-	helm upgrade -i vkpr --skip-crds -f examples/local/values-local-keycloak.yaml ./charts/vkpr
-	docker-compose -f examples/keycloak/docker-compose.yml up -d
-	echo "Open http://localhost:5443/ on your browser and check integration with keycloak using the login/password defined on the realm"
 
 vault_keycloak_local_up:
 	k3d cluster create vkpr-local --k3s-server-arg "--no-deploy=traefik"
