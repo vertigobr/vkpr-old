@@ -36,11 +36,50 @@ example_local_minimal:
 example_local_keycloak:
 	@echo "KUBECONFIG = $(KUBECONFIG)"
 	kubectl create secret generic vkpr-realm-secret --from-file=examples/keycloak/realm.json
-	helm upgrade -i vkpr --skip-crds -f examples/local/values-local-keycloak.yaml ./charts/vkpr
-	docker-compose -f examples/keycloak/docker-compose.yml up -d
+	helm upgrade -i vkpr -f examples/local/values-local-keycloak.yaml ./charts/vkpr
+	@echo ""
 	@echo "------ DONE ------"
-	@echo "Browser OIDC login test:"
-	@echo "Open http://localhost:5443/ on your browser and check integration with keycloak using the login/password defined on the realm"
+	@echo ""
+	@echo "1. Start OIDC login test app:"
+	@echo ""
+	@echo "  docker-compose -f examples/keycloak/docker-compose.yml up -d"
+	@echo ""
+	@echo "2. Browse OIDC login test app: open http://localhost:5443/ on your browser and check OIDC integration with keycloak login (user/password))"
+	@echo ""
+	@echo "3. Obtain a JWT Token from Keycloak:"
+	@echo ""
+	@echo "  curl -s -X POST 'http://keycloak.localdomain:8080/auth/realms/vkpr/protocol/openid-connect/token' \\"
+	@echo "    -H 'Content-Type: application/x-www-form-urlencoded' \\"
+	@echo "    --data-urlencode 'client_id=oidc-demo' \\"
+	@echo "    --data-urlencode 'grant_type=password' \\"
+	@echo "    --data-urlencode 'client_secret=60e50da1-b492-4995-9574-763fa285456c' \\"
+	@echo "    --data-urlencode 'scope=openid' \\"
+	@echo "    --data-urlencode 'username=user' \\"
+	@echo "    --data-urlencode 'password=password'"
+	@echo ""
+
+example_local_loki_grafana:
+	@echo "KUBECONFIG = $(KUBECONFIG)"
+	helm upgrade -i vkpr -f examples/local/values-local-loki-grafana.yaml ./charts/vkpr
+
+example_local_keycloak_grafana:
+	@echo "KUBECONFIG = $(KUBECONFIG)"
+	kubectl create secret generic vkpr-realm-secret --from-file=examples/keycloak/realm.json
+	helm upgrade -i vkpr -f examples/local/values-local-keycloak-grafana.yaml ./charts/vkpr
+
+get_grafana_secret:
+	@kubectl get secret vkpr-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+example_local_vault:
+	@echo "KUBECONFIG = $(KUBECONFIG)"
+	kubectl create secret generic digitalocean-dns --from-literal=access-token=${DO_TOKEN}
+	kubectl create secret generic vkpr-realm-secret --from-file=examples/keycloak/realm.json
+	helm upgrade -i vkpr --skip-crds -f examples/local/values-local-vault.yaml ./charts/vkpr --set external-dns.digitalocean.apiToken=${DO_TOKEN}
+
+example_local_vault_http:
+	@echo "KUBECONFIG = $(KUBECONFIG)"
+	kubectl create secret generic vkpr-realm-secret --from-file=examples/keycloak/realm.json
+	helm upgrade -i vkpr --skip-crds -f examples/local/values-local-vault-http.yaml ./charts/vkpr
 
 ## VAULT SETUP ##
 
@@ -136,18 +175,7 @@ vault_k8s_config:
 vault_k8s_role:
 	vault write auth/kubernetes/role/issuer bound_service_account_names=issuer bound_service_account_namespaces=default policies=pki ttl=20m
 
-vault_keycloak_local_up:
-	k3d cluster create vkpr-local --k3s-server-arg "--no-deploy=traefik"
-	export KUBECONFIG=$$(k3d kubeconfig write vkpr-local)
-	kubectl create secret generic digitalocean-dns --from-literal=access-token=${DO_TOKEN}
-	kubectl create secret generic vkpr-realm-secret --from-file=examples/keycloak/realm.json
-	helm upgrade -i vkpr --skip-crds -f examples/local/values-local-vault.yaml ./charts/vkpr --set external-dns.digitalocean.apiToken=${DO_TOKEN}
-
-vault_keycloak_local_http_up:
-	k3d cluster create vkpr-local --k3s-server-arg "--no-deploy=traefik"
-	export KUBECONFIG=$$(k3d kubeconfig write vkpr-local)
-	kubectl create secret generic vkpr-realm-secret --from-file=examples/keycloak/realm.json
-	helm upgrade -i vkpr --skip-crds -f examples/local/values-local-vault-http.yaml ./charts/vkpr
+load_balancer_hosts:
 	echo "Detecting LoadBalancer external IP"
 	export LB_IP=""; \
 	while [ -z "$${LB_IP}" ]; do \
@@ -159,9 +187,9 @@ vault_keycloak_local_http_up:
 			echo "LoadBalancer external IP: $${LB_IP}"; \
 			echo "Hacking into /etc/hosts, gonna need sudo, please."; \
 			if grep -q "vkpr-keycloak-http" /etc/hosts; then \
-				sudo sed "s/.*vkpr-keycloak-http.*/$${LB_IP} vkpr-vault.default.svc vkpr-keycloak-http.default.svc/g" -i /etc/hosts; \
+				sudo sed "s/.*vkpr-keycloak-http.*/$${LB_IP} vkpr-grafana.default.svc vkpr-vault.default.svc vkpr-keycloak-http.default.svc/g" -i /etc/hosts; \
 			else \
-				sudo sh -c 'echo "$${LB_IP} vkpr-vault.default.svc vkpr-keycloak-http.default.svc" >> /etc/hosts'; \
+				sudo sh -c 'echo "$${LB_IP} vkpr-grafana.default.svc vkpr-vault.default.svc vkpr-keycloak-http.default.svc" >> /etc/hosts'; \
 			fi; \
 		fi; \
 	done

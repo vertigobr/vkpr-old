@@ -5,20 +5,23 @@
 # - Ingress controller (ingress-nginx)
 # - Aplicação "whoami"
 # - Keycloak
+# - Grafana (OAuth)
 #
 # INSTALAÇÃO COM MAKEFILE:
 #
 # make k3d_create
-# make example_local_keycloak
+# make example_local_keycloak_grafana
+# make load_balancer_hosts
 #
 #
 # INSTALAÇÃO VIA HELM (manual):
 #
 # kubectl create secret generic vkpr-realm-secret --from-file=examples/keycloak/realms/realm.json
-# helm upgrade -i vkpr -f examples/local/values-local-keycloak.yaml ./charts/vkpr
+# helm upgrade -i vkpr -f examples/local/values-local-keycloak-grafana.yaml ./charts/vkpr
 #
-# Coloque as seguintes entradas no /etc/hosts :
-# 127.0.0.1    keycloak.localdomain
+# Coloque a entrada abaixo no /etc/hosts (use o IP atribuído ao load balancer):
+#
+# <external-ip> vkpr-grafana.default.svc vkpr-keycloak-http.default.svc
 #
 # Abrir a seguinte URL no browser:
 #
@@ -56,7 +59,29 @@ loki-stack:
 # MONITORING STACK
 #
 kube-prometheus-stack:
-  enabled: false
+  enabled: true
+  ## Manages Prometheus and Alertmanager components
+  prometheusOperator:
+    enabled: false
+  prometheus:
+    enabled: false
+  alertmanager:
+    enabled: false
+  kubeStateMetrics:
+    enabled: false
+  nodeExporter:
+    enabled: false
+  grafana:
+    enabled: true
+    sidecar:
+      datasources:
+        enabled: true
+    persistence:
+      enabled: false
+    ingress:
+      enabled: true
+      hosts:
+      - vkpr-grafana.default.svc
 
 #
 # SECURITY STACK
@@ -76,7 +101,7 @@ keycloak:
     annotations:
       kubernetes.io/ingress.class: nginx
     rules:
-      - host: "keycloak.localdomain"
+      - host: "vkpr-keycloak-http.default.svc"
         paths: ["/"]
   # mounts realm.json as secret
   # mounts volume as H2 database (when no postgres is used)

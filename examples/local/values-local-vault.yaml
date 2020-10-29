@@ -12,8 +12,20 @@
 # - Keycloak
 # - Vault
 #
+#
+# INSTALAÇÃO COM MAKEFILE:
+#
+# make k3d_create
+# make example_local_vault
+# make vault_init_http
+# make vault_setup_http
+#
+#
+# INSTALAÇÃO VIA CLI (manual e longa):
+#
 # kubectl create secret generic vkpr-realm-secret --from-file=examples/keycloak/realms/realm.json
-# helm upgrade -i vkpr --skip-crds -f examples/local/values-local-vault.yaml ./charts/vkpr \
+# kubectl create secret generic digitalocean-dns --from-literal=access-token=${DO_TOKEN}
+# helm upgrade -i vkpr -f examples/local/values-local-vault.yaml ./charts/vkpr \
 #   --set external-dns.digitalocean.apiToken=${DO_TOKEN}
 #
 # Se preferir seguir os passos abaixo pela UI: https://learn.hashicorp.com/tutorials/vault/oidc-auth
@@ -27,26 +39,22 @@
 # kubectl exec -ti vkpr-vault-0 -- vault operator init -key-shares=1 -key-threshold=1
 # kubectl exec -ti vkpr-vault-0 -- vault operator unseal KEY
 #
-# 2. Criar policy "reader" (via UI, descobrir como fazer via CLI no kubectl exec)
+# 2. Criar policy "reader":
 #
 # path "/secret/*" {
 #    capabilities = ["read", "list"]
 # }
-
-# vault policy write reader path <<EOF  >> reader.hcl
-# "/secret/*" {
-#     capabilities = ["read", "list"]
-#  } 
-#  EOF 
-
-# kubectl cp  
 #
-# kubectl exec -ti vkpr-vault-0 -- vault policy write reader reader.hcl
+# ou via CLI (depois do unseal):
+#
+# export VAULT_ADDR=http://vkpr-vault.default.svc
+# vault login <ROOT_TOKEN>
+# echo 'path "/secret/*" { capabilities = ["read", "list"] }' | vault policy write reader -
 #
 # 3. Criar oidc auth method
 #
-# kubectl exec -ti vkpr-vault-0 -- vault auth enable oidc
-# kubectl exec -ti vkpr-vault-0 -- vault write auth/oidc/config \
+# vault auth enable oidc
+# vault write auth/oidc/config \
 #        oidc_discovery_url="https://keycloak.vkpr-dev.vertigo.com.br/auth/realms/vkpr" \
 #        oidc_client_id="oidc-demo" \
 #        oidc_client_secret="60e50da1-b492-4995-9574-763fa285456c" \
@@ -56,7 +64,7 @@
 #
 # 4. Criar role "reader":
 #
-# kubectl exec -ti vkpr-vault-0 -- vault write auth/oidc/role/reader \
+# vault write auth/oidc/role/reader \
 #   bound_audiences="oidc-demo" \
 #   allowed_redirect_uris="https://vault.vkpr-dev.vertigo.com.br/ui/vault/auth/oidc/oidc/callback" \
 #   allowed_redirect_uris="http://localhost:8250/oidc/callback" \
@@ -84,7 +92,7 @@ external-dns:
 
 cert-manager:
   enabled: true
-  installCRDs: true # ok for testing
+  installCRDs: false
   ingressShim:
     defaultIssuerName: letsencrypt-staging
     defaultIssuerKind: ClusterIssuer

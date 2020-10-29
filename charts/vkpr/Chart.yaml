@@ -28,7 +28,7 @@ dependencies:
   ### LOGGING STACK ###
   - name: loki-stack
     repository: https://grafana.github.io/loki/charts
-    version: 0.41.2
+    version: 2.0.0
     condition: loki-stack.enabled
 #
 # LOGGING STACK
@@ -70,7 +70,7 @@ dependencies:
   ### MONITORING STACK ###
   - name: kube-prometheus-stack
     repository: https://prometheus-community.github.io/helm-charts
-    version: 10.1.0
+    version: 10.3.1
     condition: kube-prometheus-stack.enabled
 
 # - name: metrics-server

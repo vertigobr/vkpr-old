@@ -11,16 +11,22 @@
 #
 # INSTALAÇÃO COM MAKEFILE:
 #
-# make vault_keycloak_local_http_up
+# make k3d_create
+# make example_local_vault_http
+# make load_balancer_hosts
 # make vault_init_http
 # make vault_setup_http
 #
-# INSTALAÇÃO VIA CLI (manual):
+# INSTALAÇÃO VIA CLI (manual e longa):
 #
 # kubectl create secret generic vkpr-realm-secret --from-file=examples/keycloak/realms/realm.json
-# helm upgrade -i vkpr --skip-crds -f examples/local/values-local-vault-http.yaml ./charts/vkpr
+# helm upgrade -i vkpr -f examples/local/values-local-vault-http.yaml ./charts/vkpr
 #
-# Se preferir seguir os passos abaixo pela UI: https://learn.hashicorp.com/tutorials/vault/oidc-auth
+# Coloque a entrada abaixo no /etc/hosts (use o IP atribuído ao load balancer):
+#
+# <external-ip> vkpr-vault.default.svc vkpr-keycloak-http.default.svc
+#
+# Os passos a seguir para configuração do Vault podem opcionalmente ser feitos pela UI: https://learn.hashicorp.com/tutorials/vault/oidc-auth
 #
 # VAULT
 #
@@ -48,8 +54,8 @@
 #
 # 3. Criar oidc auth method
 #
-# kubectl exec -ti vkpr-vault-0 -- vault auth enable oidc
-# kubectl exec -ti vkpr-vault-0 -- vault write auth/oidc/config \
+# vault auth enable oidc
+# vault write auth/oidc/config \
 #        oidc_discovery_url="http://vkpr-keycloak-http.default.svc/auth/realms/vkpr" \
 #        oidc_client_id="oidc-demo" \
 #        oidc_client_secret="60e50da1-b492-4995-9574-763fa285456c" \
@@ -59,7 +65,7 @@
 #
 # 4. Criar role "reader":
 #
-# kubectl exec -ti vkpr-vault-0 -- vault write auth/oidc/role/reader \
+# vault write auth/oidc/role/reader \
 #   bound_audiences="oidc-demo" \
 #   allowed_redirect_uris="http://vkpr-vault.default.svc/ui/vault/auth/oidc/oidc/callback" \
 #   allowed_redirect_uris="http://localhost:8250/oidc/callback" \

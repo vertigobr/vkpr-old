@@ -13,7 +13,7 @@
 # - External-DNS
 #
 # kubectl create secret generic digitalocean-dns --from-literal=access-token=<TOKEN>
-# helm upgrade -i vkpr --skip-crds -f examples/local/values-local-certs-dns.yaml ./charts/vkpr \
+# helm upgrade -i vkpr -f examples/local/values-local-certs-dns.yaml ./charts/vkpr \
 #   --set external-dns.digitalocean.apiToken=<TOKEN>
 # kubectl apply -f examples/local/acme.yaml
 #
@@ -44,7 +44,7 @@ external-dns:
 
 cert-manager:
   enabled: true
-  installCRDs: true # ok for testing
+  installCRDs: false # ok for testing
   ingressShim:
     defaultIssuerName: letsencrypt-staging
     defaultIssuerKind: ClusterIssuer
