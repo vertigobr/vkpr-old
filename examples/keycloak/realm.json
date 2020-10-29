@@ -64,7 +64,8 @@
               "http://localhost:5443",
               "https://vault.vkpr-dev.vertigo.com.br/ui/vault/auth/oidc/oidc/callback",
               "http://vkpr-vault.default.svc/ui/vault/auth/oidc/oidc/callback",
-              "http://vkpr-grafana.default.svc/ui/vault/auth/oidc/oidc/callback"
+              "http://vkpr-grafana.default.svc/ui/vault/auth/oidc/oidc/callback",
+              "http://vkpr-grafana.default.svc/*"
             ],
             "webOrigins": [],
             "notBefore": 0,
