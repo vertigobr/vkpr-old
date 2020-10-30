@@ -1,0 +1,166 @@
+# This file is used to define the values required for integrating Keycloak and Vault
+#
+# Valores para testes locais com k3d do Vault autenticando contra o Keycloak via OpenID,
+# usando http (sem SSL) e nomes DNS locais (com manipulação do arquivo hosts).
+#
+# O que executa:
+# - Ingress controller (ingress-nginx)
+# - Aplicação "whoami"
+# - Keycloak
+# - Vault
+#
+# INSTALAÇÃO COM MAKEFILE:
+#
+# make k3d_create
+# make example_local_vault_http
+# make load_balancer_hosts
+# make vault_init_http
+# make vault_setup_http
+#
+# INSTALAÇÃO VIA CLI (manual e longa):
+#
+# kubectl create secret generic vkpr-realm-secret --from-file=examples/keycloak/realms/realm.json
+# helm upgrade -i vkpr -f examples/local/values-local-vault-http.yaml ./charts/vkpr
+#
+# Coloque a entrada abaixo no /etc/hosts (use o IP atribuído ao load balancer):
+#
+# <external-ip> vkpr-vault.default.svc vkpr-keycloak-http.default.svc
+#
+# Os passos a seguir para configuração do Vault podem opcionalmente ser feitos pela UI: https://learn.hashicorp.com/tutorials/vault/oidc-auth
+#
+# VAULT
+#
+# 1. Instale o Vault CLI (https://www.vaultproject.io/downloads):
+#
+# 2. É preciso inicializar e fazer unseal do Vault:
+#
+# https://learn.hashicorp.com/tutorials/vault/kubernetes-raft-deployment-guide#initialize-and-unseal-vault
+# Resumo:
+# kubectl get pods -l app.kubernetes.io/name=vault
+# kubectl exec -ti vkpr-vault-0 -- vault operator init -key-shares=1 -key-threshold=1
+# kubectl exec -ti vkpr-vault-0 -- vault operator unseal KEY
+#
+# 2. Criar policy "reader":
+#
+# path "/secret/*" {
+#    capabilities = ["read", "list"]
+# }
+#
+# ou via CLI (depois do unseal):
+#
+# export VAULT_ADDR=http://vkpr-vault.default.svc
+# vault login <ROOT_TOKEN>
+# echo 'path "/secret/*" { capabilities = ["read", "list"] }' | vault policy write reader -
+#
+# 3. Criar oidc auth method
+#
+# vault auth enable oidc
+# vault write auth/oidc/config \
+#        oidc_discovery_url="http://vkpr-keycloak-http.default.svc/auth/realms/vkpr" \
+#        oidc_client_id="oidc-demo" \
+#        oidc_client_secret="60e50da1-b492-4995-9574-763fa285456c" \
+#        default_role="reader"
+#
+# Provider config: {}
+#
+# 4. Criar role "reader":
+#
+# vault write auth/oidc/role/reader \
+#   bound_audiences="oidc-demo" \
+#   allowed_redirect_uris="http://vkpr-vault.default.svc/ui/vault/auth/oidc/oidc/callback" \
+#   allowed_redirect_uris="http://localhost:8250/oidc/callback" \
+#   user_claim="sub" policies="reader"
+#
+
+#
+# INGRESS STACK
+#
+ingress-nginx:
+  enabled: true
+  
+external-dns:
+  enabled: false
+
+cert-manager:
+  enabled: false
+  installCRDs: false
+  
+ingress:
+  enabled: true
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+  hosts:
+  - host: whoami.localdomain
+    paths: ["/"]
+
+#
+# LOGGING STACK:
+#
+
+loki-stack:
+  enabled: false
+
+#
+# MONITORING STACK
+#
+kube-prometheus-stack:
+  enabled: false
+
+#
+# SECURITY STACK
+#
+vault:
+  enabled: true
+  server:
+    ha:
+      enabled: true
+      raft:
+        enabled: true
+      replicas: 1
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      hosts:
+      - host: vkpr-vault.default.svc
+        path: ["/"]
+    extraEnvironmentVars:
+      VAULT_LOG_LEVEL: debug
+
+keycloak:
+  enabled: true
+  rbac:
+    create: true
+  postgresql:
+    enabled: false
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    tls: []
+    rules:
+    - host: vkpr-keycloak-http.default.svc
+      paths: ["/"]
+  # mounts realm.json as secret
+  # mounts volume as H2 database (when no postgres is used)
+  extraVolumes: |
+    - name: vkpr-realm-secret
+      secret:
+        secretName: vkpr-realm-secret
+    - name: keycloak-data
+      persistentVolumeClaim:
+        claimName: keycloak-data-volume
+  extraVolumeMounts: |
+    - name: vkpr-realm-secret
+      mountPath: "/realm/"
+      readOnly: true
+    - name: keycloak-data
+      mountPath: "/opt/jboss/keycloak/standalone/data"
+      readOnly: false
+  extraEnv: |
+    - name: KEYCLOAK_IMPORT
+      value: /realm/realm.json
+    - name: KEYCLOAK_USER
+      value: admin
+    - name: KEYCLOAK_PASSWORD
+      value: vert1234

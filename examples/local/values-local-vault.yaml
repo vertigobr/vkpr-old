@@ -1,0 +1,205 @@
+# This file is used to define the values required for integrating Keycloak and Vault
+#
+# Valores para testes locais com k3d do Vault autenticando contra o Keycloak via OpenID,
+# usando nomes DNS e certificados reais via Cert-manager e External-DNS operando
+# via DigitalOcean (contudo com o IP da rede bridge local).
+#
+# O que executa:
+# - Ingress controller (ingress-nginx)
+# - Aplicação "whoami" com nome DNS real
+# - Cert-Manager
+# - External-DNS
+# - Keycloak
+# - Vault
+#
+#
+# INSTALAÇÃO COM MAKEFILE:
+#
+# make k3d_create
+# make example_local_vault
+# make vault_init_http
+# make vault_setup_http
+#
+#
+# INSTALAÇÃO VIA CLI (manual e longa):
+#
+# kubectl create secret generic vkpr-realm-secret --from-file=examples/keycloak/realms/realm.json
+# kubectl create secret generic digitalocean-dns --from-literal=access-token=${DO_TOKEN}
+# helm upgrade -i vkpr -f examples/local/values-local-vault.yaml ./charts/vkpr \
+#   --set external-dns.digitalocean.apiToken=${DO_TOKEN}
+#
+# Se preferir seguir os passos abaixo pela UI: https://learn.hashicorp.com/tutorials/vault/oidc-auth
+#
+# VAULT
+# 1. É preciso inicializar e fazer unseal do Vault:
+#
+# https://learn.hashicorp.com/tutorials/vault/kubernetes-raft-deployment-guide#initialize-and-unseal-vault
+# Resumo:
+# kubectl get pods -l app.kubernetes.io/name=vault
+# kubectl exec -ti vkpr-vault-0 -- vault operator init -key-shares=1 -key-threshold=1
+# kubectl exec -ti vkpr-vault-0 -- vault operator unseal KEY
+#
+# 2. Criar policy "reader":
+#
+# path "/secret/*" {
+#    capabilities = ["read", "list"]
+# }
+#
+# ou via CLI (depois do unseal):
+#
+# export VAULT_ADDR=http://vkpr-vault.default.svc
+# vault login <ROOT_TOKEN>
+# echo 'path "/secret/*" { capabilities = ["read", "list"] }' | vault policy write reader -
+#
+# 3. Criar oidc auth method
+#
+# vault auth enable oidc
+# vault write auth/oidc/config \
+#        oidc_discovery_url="https://keycloak.vkpr-dev.vertigo.com.br/auth/realms/vkpr" \
+#        oidc_client_id="oidc-demo" \
+#        oidc_client_secret="60e50da1-b492-4995-9574-763fa285456c" \
+#        default_role="reader"
+#
+# Provider config: {}
+#
+# 4. Criar role "reader":
+#
+# vault write auth/oidc/role/reader \
+#   bound_audiences="oidc-demo" \
+#   allowed_redirect_uris="https://vault.vkpr-dev.vertigo.com.br/ui/vault/auth/oidc/oidc/callback" \
+#   allowed_redirect_uris="http://localhost:8250/oidc/callback" \
+#   user_claim="sub" policies="reader"
+#
+
+#
+# INGRESS STACK
+#
+ingress-nginx:
+    enabled: true
+  
+external-dns:
+  enabled: true
+  rbac:
+    create: true
+  sources:
+  - ingress
+  provider: digitalocean
+  # provide no value here, use --set in command line
+  # digitalocean:
+  #   apiToken: <API-TOKEN>
+  interval: "1m"
+  logLevel: debug
+
+cert-manager:
+  enabled: true
+  installCRDs: false
+  ingressShim:
+    defaultIssuerName: letsencrypt-staging
+    defaultIssuerKind: ClusterIssuer
+    defaultIssuerGroup: cert-manager.io
+  prometheus:
+    enabled: false
+  
+# chart values
+# ingress:
+#   enabled: true
+#   annotations:
+#     ingress.kubernetes.io/ssl-redirect: "false"
+#   hosts:
+#   - host: whoami.localdomain
+#     paths: ["/"]
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+  hosts:
+  - host: whoami.vkpr-dev.vertigo.com.br
+    paths: ["/"]
+  tls:
+  - hosts:
+    - whoami.vkpr-dev.vertigo.com.br
+    secretName: whoami-cert
+  
+#
+# LOGGING STACK:
+#
+
+loki-stack:
+  enabled: false
+
+#
+# MONITORING STACK
+#
+kube-prometheus-stack:
+  enabled: false
+
+#
+# SECURITY STACK
+#
+vault:
+  enabled: true
+  server:
+    ha:
+      enabled: true
+      raft:
+        enabled: true
+      replicas: 1
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: "true"
+      hosts:
+      - host: vault.vkpr-dev.vertigo.com.br
+        path: ["/"]
+      tls:
+      - hosts:
+        - vault.vkpr-dev.vertigo.com.br
+        secretName: vault-cert
+    extraEnvironmentVars:
+      VAULT_LOG_LEVEL: debug
+
+keycloak:
+  enabled: true
+  rbac:
+    create: true
+  postgresql:
+    enabled: false
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+    tls:
+    - hosts:
+      - keycloak.vkpr-dev.vertigo.com.br
+      secretName: keycloak-cert
+    rules:
+    - host: keycloak.vkpr-dev.vertigo.com.br
+      paths: ["/"]
+  # mounts realm.json as secret
+  # mounts volume as H2 database (when no postgres is used)
+  extraVolumes: |
+    - name: vkpr-realm-secret
+      secret:
+        secretName: vkpr-realm-secret
+    - name: keycloak-data
+      persistentVolumeClaim:
+        claimName: keycloak-data-volume
+  extraVolumeMounts: |
+    - name: vkpr-realm-secret
+      mountPath: "/realm/"
+      readOnly: true
+    - name: keycloak-data
+      mountPath: "/opt/jboss/keycloak/standalone/data"
+      readOnly: false
+  extraEnv: |
+    - name: PROXY_ADDRESS_FORWARDING
+      value: "true"
+    - name: KEYCLOAK_IMPORT
+      value: /realm/realm.json
+    - name: KEYCLOAK_USER
+      value: admin
+    - name: KEYCLOAK_PASSWORD
+      value: vert1234

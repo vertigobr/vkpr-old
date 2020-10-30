@@ -31,3 +31,4 @@ kubeconfig
 node_modules/
 .docusaurus/
 build/
+init-keys.json

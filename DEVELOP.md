@@ -19,6 +19,7 @@ Insira a linha abaixo no arquivo /etc/hosts da estação de desenvolvimento:
 
 ```
 127.0.0.1 	whoami.localdomain
+127.0.0.1 	keycloak.localdomain
 ```
 
 ### Ferramentas

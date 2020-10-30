@@ -5,11 +5,13 @@
 
 VKPR is inspired in the [BKPR project](https://github.com/bitnami/kube-prod-runtime) but it's handed over through Helm chart.
 
+[&#x1f1fa;&#x1f1f8; &#x1f1ec;&#x1f1e7; English](README.md) | [&#x1f1e7;&#x1f1f7; &#x1f1f5;&#x1f1f9; Português](README_pt.md)
+
 ## Description
 
 VKPR was developed to make Kubernetes easier to use. It is composed of third-party sets, organized to deliver a production-ready Kubernetes with minimal effort.
 
-The project is structured in stacks that group products with correlative objective. At the moment, these are the available stacks:
+The project is structured in stacks that group products with correlated objective. At the moment, these are the available stacks:
 
 - **[Ingress stack](#ingress-stack):**
   - NGINX Ingress Controller
@@ -38,7 +40,7 @@ helm repo update
 helm upgrade -i -f values.yaml -n vkpr vkpr vertigo/vkpr
 ```
 
-Take a look on docs to check the installation for a more specific scenario.
+Take a look on [VKPR documentation](https://charts.vertigo.com.br/docs/) to check the installation for a more specific scenario.
 
 ## Stack
 
@@ -80,16 +82,8 @@ The **Backup Stack** is dedicated to backup and restore tools in order to migrat
 
 ## Charts version
 
-|                                                 Charts                                         | VKPR 0.8.0 |
-|------------------------------------------------------------------------------------------------|------------|
-| [cert-manager](https://charts.vertigo.com.br/docs/stacks#cert-manager)                         |  `1.0.3`   |
-| [ExternalDNS](https://charts.vertigo.com.br/docs/stacks#externaldns)                           |  `3.4.9`   |
-| [Loki](https://charts.vertigo.com.br/docs/stacks#loki)                                         |  `0.41.2`  |
-| [Keycloak](https://charts.vertigo.com.br/docs/stacks#keycloak)                                 |  `8.2.2`   |
-| [NGINX Ingress Controller](https://charts.vertigo.com.br/docs/stacks#nginx-ingress-controller) |  `3.7.1`  |
-| [Kube Prometheus Stack](https://charts.vertigo.com.br/docs/stacks#prometheus-operator)         |  `10.1.0`  |
-| [Vault](https://charts.vertigo.com.br/docs/stacks#vault)                                       |  `0.7.0`   |
-| [Velero](https://charts.vertigo.com.br/docs/stacks#velero)                                     |  `2.13.3`   |
+<!-- @import "VERSIONS.md" -->
+See [VKPR Chart and Subchart versions](VERSIONS.md).
 
 ## Requisites
 
