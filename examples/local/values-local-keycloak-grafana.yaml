@@ -92,8 +92,9 @@ kube-prometheus-stack:
       GF_AUTH_GENERIC_OAUTH_AUTH_URL: "http://vkpr-keycloak-http.default.svc/auth/realms/vkpr/protocol/openid-connect/auth"
       GF_AUTH_GENERIC_OAUTH_TOKEN_URL: "http://vkpr-keycloak-http.default.svc/auth/realms/vkpr/protocol/openid-connect/token"
       GF_AUTH_GENERIC_OAUTH_API_URL: "http://vkpr-keycloak-http.default.svc/auth/realms/vkpr/protocol/openid-connect/userinfo"
-      GF_AUTH_GENERIC_OAUTH_SIGNOUT_REDIRECT_URL: "http://vkpr-keycloak-http.default.svc/auth/realms/vkpr/protocol/openid-connect/logout"
+      GF_AUTH_SIGNOUT_REDIRECT_URL: "http://vkpr-keycloak-http.default.svc/auth/realms/vkpr/protocol/openid-connect/logout?redirect_uri=http%3A%2F%2Fvkpr-grafana.default.svc%2Flogin"
       GF_AUTH_GENERIC_OAUTH_ALLOW_SIGN_UP: true
+      GF_AUTH_GENERIC_OAUTH_TLS_SKIP_VERIFY_INSECURE: true
       GF_AUTH_GENERIC_OAUTH_SCOPES: openid profile email
       GF_SECURITY_ADMIN_USER: admin
       GF_SECURITY_ADMIN_PASSWORD: vert1234
