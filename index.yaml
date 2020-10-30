@@ -3,24 +3,24 @@ entries:
   vkpr:
   - apiVersion: v2
     appVersion: v1.4.0
-    created: "2020-08-07T14:47:54.32165865Z"
+    created: "2020-10-30T15:52:36.823248004Z"
     dependencies:
     - condition: external-dns.enabled
       name: external-dns
       repository: https://charts.bitnami.com/bitnami
       version: 3.4.9
-    - condition: nginx-ingress.enabled
-      name: nginx-ingress
-      repository: https://kubernetes-charts.storage.googleapis.com
+    - condition: ingress-nginx.enabled
+      name: ingress-nginx
+      repository: https://kubernetes.github.io/ingress-nginx
       version: 3.7.1
     - condition: loki-stack.enabled
       name: loki-stack
       repository: https://grafana.github.io/loki/charts
-      version: 0.41.2
+      version: 2.0.0
     - condition: kube-prometheus-stack.enabled
       name: kube-prometheus-stack
       repository: https://prometheus-community.github.io/helm-charts
-      version: 10.1.0
+      version: 10.3.1
     - condition: cert-manager.enabled
       name: cert-manager
       repository: https://charts.jetstack.io
@@ -28,17 +28,17 @@ entries:
     - condition: keycloak.enabled
       name: keycloak
       repository: https://codecentric.github.io/helm-charts
-      version: 8.2.2
+      version: 9.5.0
     - condition: vault.enabled
       name: vault
       repository: https://helm.releases.hashicorp.com
-      version: 0.7.0
+      version: 0.8.0
     - condition: velero.enabled
       name: velero
       repository: https://vmware-tanzu.github.io/helm-charts/
       version: 2.13.3
     description: VKPR Helm chart (Vertigo Kubernetes Production Runtime)
-    digest: 5407a493b65607ef7ea3262e8fadc54efde52eb0a080696451b77d4437b8fc35
+    digest: 9781c8bf66713fb8ffd22fb677d64aea12f5b1d1e69e7aecc5a9077052634dde
     home: https://github.com/vertigobr/vkpr
     icon: https://vertigo.com.br/wp-content/uploads/favicon.png
     keywords:
@@ -51,110 +51,6 @@ entries:
     sources:
     - https://github.com/vertigobr/vkpr
     urls:
-    - https://github.com/vertigobr/vkpr/releases/download/vkpr-0.8.0/vkpr-0.8.0.tgz
-    version: 0.8.0
-  - apiVersion: v2
-    appVersion: v1.4.0
-    created: "2020-08-07T14:47:54.32165865Z"
-    dependencies:
-    - condition: external-dns.enabled
-      name: external-dns
-      repository: https://charts.bitnami.com/bitnami
-      version: 3.2.2
-    - condition: nginx-ingress.enabled
-      name: nginx-ingress
-      repository: https://kubernetes-charts.storage.googleapis.com
-      version: 1.34.3
-    - condition: loki-stack.enabled
-      name: loki-stack
-      repository: https://grafana.github.io/loki/charts
-      version: 0.37.0
-    - condition: prometheus-operator.enabled
-      name: prometheus-operator
-      repository: https://kubernetes-charts.storage.googleapis.com
-      version: 8.12.3
-    - condition: cert-manager.enabled
-      name: cert-manager
-      repository: https://charts.jetstack.io
-      version: v0.16.0
-    - condition: keycloak.enabled
-      name: keycloak
-      repository: https://codecentric.github.io/helm-charts
-      version: 8.2.2
-    - condition: vault.enabled
-      name: vault
-      repository: https://helm.releases.hashicorp.com
-      version: 0.5.0
-    - condition: velero.enabled
-      name: velero
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.7.4
-    description: VKPR Helm chart (Vertigo Kubernetes Production Runtime)
-    digest: 5407a493b65607ef7ea3262e8fadc54efde52eb0a080696451b77d4437b8fc35
-    home: https://github.com/vertigobr/vkpr
-    icon: https://vertigo.com.br/wp-content/uploads/favicon.png
-    keywords:
-    - vkpr
-    - production runtime
-    maintainers:
-    - email: devops@vertigo.com.br
-      name: Vertigo
-    name: vkpr
-    sources:
-    - https://github.com/vertigobr/vkpr
-    urls:
-    - https://github.com/vertigobr/vkpr/releases/download/vkpr-0.7.1/vkpr-0.7.1.tgz
-    version: 0.7.1
-  - apiVersion: v2
-    appVersion: v1.4.0
-    created: "2020-07-31T18:24:35.163760894Z"
-    dependencies:
-    - condition: external-dns.enabled
-      name: external-dns
-      repository: https://charts.bitnami.com/bitnami
-      version: 3.2.2
-    - condition: nginx-ingress.enabled
-      name: nginx-ingress
-      repository: https://kubernetes-charts.storage.googleapis.com
-      version: 1.34.3
-    - condition: loki-stack.enabled
-      name: loki-stack
-      repository: https://grafana.github.io/loki/charts
-      version: 0.37.0
-    - condition: prometheus-operator.enabled
-      name: prometheus-operator
-      repository: https://kubernetes-charts.storage.googleapis.com
-      version: 8.12.3
-    - condition: cert-manager.enabled
-      name: cert-manager
-      repository: https://charts.jetstack.io
-      version: v0.16.0
-    - condition: keycloak.enabled
-      name: keycloak
-      repository: https://codecentric.github.io/helm-charts
-      version: 8.2.2
-    - condition: vault.enabled
-      name: vault
-      repository: https://helm.releases.hashicorp.com
-      version: 0.5.0
-    - condition: velero.enabled
-      name: velero
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.7.4
-    description: VKPR Helm chart (Vertigo Kubernetes Production Runtime)
-    digest: e3405e3a315d8cde3662cf24c202a23ca0193706bb84a668d0c6d3ae5ed61bda
-    home: https://github.com/vertigobr/vkpr
-    icon: https://vertigo.com.br/wp-content/uploads/favicon.png
-    keywords:
-    - vkpr
-    - production runtime
-    maintainers:
-    - email: devops@vertigo.com.br
-      name: Vertigo
-    name: vkpr
-    sources:
-    - https://github.com/vertigobr/vkpr
-    urls:
-    - https://github.com/vertigobr/vkpr/releases/download/vkpr-0.7.0/vkpr-0.7.0.tgz
-    version: 0.7.0
-generated: "2020-07-31T18:24:34.880786768Z"
+    - https://github.com/vertigobr/vkpr/releases/download/vkpr-0.8.1/vkpr-0.8.1.tgz
+    version: 0.8.1
+generated: "2020-10-30T15:52:36.633939946Z"
