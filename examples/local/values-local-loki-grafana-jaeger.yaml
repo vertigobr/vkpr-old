@@ -1,0 +1,149 @@
+#
+# Valores para testes locais com o k3d.
+# O objetivo é mostrar a integração e uso de Open Tracing entre Loki, Jaeger e Grafana.
+# 
+# O que executa:
+# - Ingress controller (ingress-nginx)
+# - Aplicação "whoami"
+# - Loki
+# - Grafana
+# - Prometheus
+# - Jaeger
+#
+# INSTALAÇÃO COM MAKEFILE:
+#
+# make k3d_create
+# make example_local_loki_grafana_jaeger
+# make get_grafana_secret
+#
+# INSTALAÇÃO VIA HELM (manual):
+#
+# helm upgrade -i vkpr -f examples/local/values-local-loki-grafana.yaml ./charts/vkpr
+# kubectl get secret vkpr-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+#
+# Coloque as seguintes entradas no /etc/hosts :
+# 127.0.0.1    grafana.localdomain
+#
+# Abrir a seguinte URL no browser:
+#
+# http://grafana.localdomain:8080
+#
+
+#
+# INGRESS STACK (enables OpenTracing)
+#
+ingress-nginx:
+  enabled: true
+  controller:
+    config:
+      enable-opentracing: "true"
+      jaeger-collector-host: vkpr-jaeger-agent
+
+external-dns:
+  enabled: false
+cert-manager:
+  enabled: false
+
+# chart values
+ingress:
+  enabled: true
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/enable-opentracing: "true"
+  hosts:
+  - host: whoami.localdomain
+    paths: ["/"]
+
+#
+# LOGGING STACK:
+#
+
+loki-stack:
+  enabled: true
+  grafana:
+    enabled: false
+
+jaeger:
+  enabled: true
+  cassandra:
+    config:
+      max_heap_size: 1024M
+      heap_new_size: 256M
+      cluster_size: 1
+    persistence:
+      enabled: true
+    resources:
+      requests:
+        memory: 2048Mi
+        cpu: 0.4
+      limits:
+        memory: 2048Mi
+        cpu: 1.0
+  query:
+    ingress:
+      enabled: true
+      hosts:
+      - jaeger.localdomain
+
+#
+# MONITORING STACK
+#
+kube-prometheus-stack:
+  enabled: true
+  ## Manages Prometheus and Alertmanager components
+  prometheusOperator:
+    enabled: false
+    ## CRDs são mandatórios no Helm 3 (ignorar as duas linhas abaixo)
+    createCustomResource: false
+    cleanupCustomResource: false
+  prometheus:
+    enabled: false
+  alertmanager:
+    enabled: false
+  grafana:
+    enabled: true
+    sidecar:
+      datasources:
+        enabled: true
+    persistence:
+      enabled: false
+    ingress:
+      enabled: true
+      hosts:
+      - grafana.localdomain
+  ## Component scraping the kube api server
+  kubeApiServer:
+    enabled: false
+  ## Component scraping the kubelet and kubelet-hosted cAdvisor
+  kubelet:
+    enabled: false
+  ## Component scraping the kube controller manager
+  kubeControllerManager:
+    enabled: false
+  ## Component scraping coreDns. Use either this or kubeDns
+  coreDns:
+    enabled: false
+  ## Component scraping kubeDns. Use either this or coreDns
+  kubeDns:
+    enabled: false
+  ## Component scraping etcd
+  kubeEtcd:
+    enabled: false
+  ## Component scraping kube scheduler
+  kubeScheduler:
+    enabled: false
+  ## Component scraping kube proxy
+  kubeProxy:
+    enabled: false
+  ## Component scraping kube state metrics
+  kubeStateMetrics:
+    enabled: false
+
+#
+# SECURITY STACK
+#
+vault:
+  enabled: false
+
+keycloak:
+  enabled: false
