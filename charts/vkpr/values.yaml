@@ -46,6 +46,9 @@ vault:
 loki-stack:
   enabled: false
 
+jaeger:
+  enabled: false
+
 kube-prometheus-stack:
   enabled: false
   prometheusOperator:

@@ -62,6 +62,10 @@ example_local_loki_grafana:
 	@echo "KUBECONFIG = $(KUBECONFIG)"
 	helm upgrade -i vkpr -f examples/local/values-local-loki-grafana.yaml ./charts/vkpr
 
+example_local_loki_grafana_jaeger:
+	@echo "KUBECONFIG = $(KUBECONFIG)"
+	helm upgrade -i vkpr -f examples/local/values-local-loki-grafana-jaeger.yaml ./charts/vkpr
+
 example_local_keycloak_grafana:
 	@echo "KUBECONFIG = $(KUBECONFIG)"
 	kubectl create secret generic vkpr-realm-secret --from-file=examples/keycloak/realm.json
