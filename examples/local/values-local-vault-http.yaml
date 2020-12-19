@@ -1,9 +1,7 @@
-# This file is used to define the values required for integrating Keycloak and Vault
-#
-# Valores para testes locais com k3d do Vault autenticando contra o Keycloak via OpenID,
-# usando http (sem SSL) e nomes DNS locais (com manipulação do arquivo hosts).
-#
-# O que executa:
+# Authentication with Vault with KeyCloak
+# Guide: https://vertigobr.github.io/vkpr-docs/docs/guides/local/vault-with-keycloak
+
+# The guide covers:
 # - Ingress controller (ingress-nginx)
 # - Aplicação "whoami"
 # - Keycloak
