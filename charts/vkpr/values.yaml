@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 # subchart defaults
-ingress-nginx:
+nginx-ingress:
   enabled: true
   controller:
     electionID: vkpr-ingress-controller-leader
