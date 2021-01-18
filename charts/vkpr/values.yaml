@@ -12,12 +12,6 @@ nginx-ingress:
     autoscaling:
       enabled: false
 
-# old chart (former stable repo)
-# nginx-ingress:
-#   enabled: true
-#   controller:
-#     electionID: vkpr-ingress-controller-leader
-
 external-dns:
   enabled: false
   txtPrefix: vkpr
@@ -53,11 +47,6 @@ kube-prometheus-stack:
   enabled: false
   prometheusOperator:
     createCustomResource: false
-
-# prometheus-operator:
-#   enabled: true
-#   prometheusOperator:
-#     createCustomResource: false
 
 # dados para o CRD do ACME
 acme:
