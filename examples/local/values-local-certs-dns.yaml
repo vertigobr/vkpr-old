@@ -1,31 +1,13 @@
-#
-# Valores para testes locais com o k3d, mas com Cert-manager e External-DNS operando
-# via DigitalOcean.
-#
-# Este exemplo assume que <TOKEN> pode modificar um domínio "vkpr-dev.vertigo.com.br"
-# gerenciado pela DigitalOcean. Importante compreender que o DNS irá resolver para um
-# IP de rede local (o External-Ip do load balancer no k3d).
-#
-# O que executa:
-# - Ingress controller (ingress-nginx)
-# - Aplicação "whoami" com nome DNS real
-# - Cert-Manager
-# - External-DNS
-#
-# kubectl create secret generic digitalocean-dns --from-literal=access-token=<TOKEN>
-# helm upgrade -i vkpr -f examples/local/values-local-certs-dns.yaml ./charts/vkpr \
-#   --set external-dns.digitalocean.apiToken=<TOKEN>
-# kubectl apply -f examples/local/acme.yaml
-#
-# Testar com:
-#
-# curl -k -H "Host: whoami.vkpr-dev.vertigo.com.br" https://<EXTERNAL-IP>
-# curl -k https://whoami.vkpr-dev.vertigo.com.br
-#
+# Whoami app with real DNS
+# Guide: https://vertigobr.github.io/vkpr-docs/docs/guides/local/certs-dns
 
-#
+# The guide covers:
+# - Ingress controller (ingress-nginx)
+# - Whoami app with real DNS
+# - Cert-Manager
+# - External DNS
+
 # INGRESS STACK
-#
 ingress-nginx:
   enabled: true
 
@@ -36,33 +18,9 @@ external-dns:
   sources:
   - ingress
   provider: digitalocean
-  # provide no value here, use --set in command line
-  # digitalocean:
-  #   apiToken: <API-TOKEN>
   interval: "1m"
   logLevel: debug
 
-cert-manager:
-  enabled: true
-  installCRDs: false # ok for testing
-  ingressShim:
-    defaultIssuerName: letsencrypt-staging
-    defaultIssuerKind: ClusterIssuer
-    defaultIssuerGroup: cert-manager.io
-  prometheus:
-    enabled: false
-
-# dados para o CRD do ACME
-# acme:
-#   email: andre@vertigo.com.br
-#   solvers:
-#   - dns01:
-#       digitalocean:
-#         tokenSecretRef:
-#           name: digitalocean-dns
-#           key: access-token
-
-# chart values
 ingress:
   enabled: true
   annotations:
@@ -76,23 +34,13 @@ ingress:
     - whoami.vkpr-dev.vertigo.com.br
     secretName: whoami-cert
 
-#
-# LOGGING STACK:
-#
-
-loki-stack:
-  enabled: false
-
-#
-# MONITORING STACK
-#
-kube-prometheus-stack:
-  enabled: false
-
-#
 # SECURITY STACK
-#
-vault:
-  enabled: false
-keycloak:
-  enabled: false
+cert-manager:
+  enabled: true
+  installCRDs: false # ok for testing
+  ingressShim:
+    defaultIssuerName: letsencrypt-staging
+    defaultIssuerKind: ClusterIssuer
+    defaultIssuerGroup: cert-manager.io
+  prometheus:
+    enabled: false

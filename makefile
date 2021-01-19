@@ -191,9 +191,9 @@ load_balancer_hosts:
 			echo "LoadBalancer external IP: $${LB_IP}"; \
 			echo "Hacking into /etc/hosts, gonna need sudo, please."; \
 			if grep -q "vkpr-keycloak-http" /etc/hosts; then \
-				sudo sed "s/.*vkpr-keycloak-http.*/$${LB_IP} vkpr-grafana.default.svc vkpr-vault.default.svc vkpr-keycloak-http.default.svc/g" -i /etc/hosts; \
+				sudo sed "s/.*vkpr-keycloak-http.*/$${LB_IP} vkpr-grafana.default.svc vkpr-jaeger.default.svc vkpr-vault.default.svc vkpr-keycloak-http.default.svc/g" -i /etc/hosts; \
 			else \
-				sudo sh -c 'echo "$${LB_IP} vkpr-grafana.default.svc vkpr-vault.default.svc vkpr-keycloak-http.default.svc" >> /etc/hosts'; \
+				sudo sh -c "echo '$${LB_IP} vkpr-grafana.default.svc vkpr-jaeger.default.svc vkpr-vault.default.svc vkpr-keycloak-http.default.svc' >> /etc/hosts"; \
 			fi; \
 		fi; \
 	done

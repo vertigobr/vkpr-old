@@ -1,6 +1,6 @@
 apiVersion: v2
 name: vkpr
-version: 0.8.2
+version: 0.8.3
 appVersion: v1.4.0
 home: https://github.com/vertigobr/vkpr
 icon: https://vertigo.com.br/wp-content/uploads/favicon.png
@@ -15,105 +15,47 @@ sources:
   - https://github.com/vertigobr/vkpr
 dependencies:
   ### INGRESS STACK ###
+  - name: ingress-nginx
+    repository: https://kubernetes.github.io/ingress-nginx
+    version: 3.7.1
+    condition: nginx-ingress.enabled
+    alias: nginx-ingress
   - name: external-dns
     repository: https://charts.bitnami.com/bitnami
     version: 3.4.9
     condition: external-dns.enabled
-
-  - name: ingress-nginx
-    repository: https://kubernetes.github.io/ingress-nginx
-    version: 3.7.1
-    condition: ingress-nginx.enabled
 
   ### LOGGING STACK ###
   - name: loki-stack
     repository: https://grafana.github.io/loki/charts
     version: 2.0.0
     condition: loki-stack.enabled
-#
-# LOGGING STACK
-#
-# ELK STACK
-# - name: fluentd-elasticsearch
-#   repository: https://kiwigrid.github.io
-#   version: 5.3.1
-#   condition: fluentd-elasticsearch.enabled
-# - name: elasticsearch
-#   repository: https://helm.elastic.co
-#   version: 7.5.0
-#   condition: elasticsearch.enabled
-# - name: kibana
-#   repository: https://helm.elastic.co
-#   version: 7.5.0
-#   condition: kibana.enabled
-
-# GRAYLOG STACK
-# - name: elasticsearch
-#  repository: https://helm.elastic.co
-#  version: 6.5.0 # nao pode ser 7 por causa do graylog
-  # 6.6.2-alpha1
-  # 6.5.0
-#  condition: elasticsearch.enabled
-# - name: graylog
-#  repository: https://kubernetes-charts.storage.googleapis.com
-#  version: 1.6.2
-#  condition: graylog.enabled
-# - name: mongodb-replicaset
-#  repository: https://kubernetes-charts.storage.googleapis.com
-#  version: 3.14.1
-#  condition: mongodb-replicaset.enabled
-# - name: fluent-bit
-#   repository: https://kubernetes-charts.storage.googleapis.com
-#   version: 2.8.5
-#   condition: fluent-bit.enabled
 
   ### MONITORING STACK ###
   - name: kube-prometheus-stack
     repository: https://prometheus-community.github.io/helm-charts
     version: 10.3.1
     condition: kube-prometheus-stack.enabled
-
   - name: jaeger
     repository: https://jaegertracing.github.io/helm-charts
     version: 0.39.0
     condition: jaeger.enabled
-
-# - name: metrics-server
-#   repository: https://kubernetes-charts.storage.googleapis.com
-#   version: 2.8.8
-#   condition: metrics-server.enabled
-
-# - name: metricbeat
-#   repository: https://helm.elastic.co
-#   version: 7.5.0
-#   condition: metricbeat.enabled
-
-# - name: kube-state-metrics
-#   repository: https://kubernetes-charts.storage.googleapis.com
-#   version: 2.4.1
-#   condition: kube-state-metrics.enabled
 
   ### SECURITY STACK ###
   - name: cert-manager
     repository: https://charts.jetstack.io
     version: v1.0.3
     condition: cert-manager.enabled
-
   - name: keycloak
     repository: https://codecentric.github.io/helm-charts
     version: 9.5.0
     condition: keycloak.enabled
-
   - name: vault
     repository: https://helm.releases.hashicorp.com
     version: 0.8.0
     condition: vault.enabled
 
   ### BACKUP STACK ###
-  # - name: velero
-  #   repository: https://kubernetes-charts.storage.googleapis.com/
-  #   version: 2.7.4
-  #   condition: velero.enabled
   - name: velero
     repository: https://vmware-tanzu.github.io/helm-charts/
     version: 2.13.3

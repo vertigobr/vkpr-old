@@ -1,5 +1,12 @@
 # Release Notes
 
+## Version 0.8.3 - 2020-01-19
+
+Improvements:
+
+- Added alias in nginx ingress dependency
+- Added a choice to disable the whoami app
+
 ## Version 0.8.1 - 2020-10-21
 
 Upgrades:

@@ -1,45 +1,16 @@
-#
-# Valores para testes locais com o k3d.
-# 
-# O que executa:
+# Grafana with KeyCloak
+# Guide: https://vertigobr.github.io/vkpr-docs/docs/guides/local/grafana-with-keycloak
+
+# The guide covers:
 # - Ingress controller (ingress-nginx)
-# - Aplicação "whoami"
+# - Whoami app
 # - Keycloak
 # - Grafana (OAuth)
-#
-# INSTALAÇÃO COM MAKEFILE:
-#
-# make k3d_create
-# make example_local_keycloak_grafana
-# make load_balancer_hosts
-#
-#
-# INSTALAÇÃO VIA HELM (manual):
-#
-# kubectl create secret generic vkpr-realm-secret --from-file=examples/keycloak/realms/realm.json
-# helm upgrade -i vkpr -f examples/local/values-local-keycloak-grafana.yaml ./charts/vkpr
-#
-# Coloque a entrada abaixo no /etc/hosts (use o IP atribuído ao load balancer):
-#
-# <external-ip> vkpr-grafana.default.svc vkpr-keycloak-http.default.svc
-#
-# Abrir a seguinte URL no browser:
-#
-# http://localhost:5443/
-#
 
-#
 # INGRESS STACK
-#
 ingress-nginx:
   enabled: true
 
-external-dns:
-  enabled: false
-cert-manager:
-  enabled: false
-
-# chart values
 ingress:
   enabled: true
   annotations:
@@ -48,19 +19,10 @@ ingress:
   - host: whoami.localdomain
     paths: ["/"]
 
-#
-# LOGGING STACK:
-#
 
-loki-stack:
-  enabled: false
-
-#
 # MONITORING STACK
-#
 kube-prometheus-stack:
   enabled: true
-  ## Manages Prometheus and Alertmanager components
   prometheusOperator:
     enabled: false
   prometheus:
@@ -97,15 +59,11 @@ kube-prometheus-stack:
       GF_AUTH_GENERIC_OAUTH_TLS_SKIP_VERIFY_INSECURE: true
       GF_AUTH_GENERIC_OAUTH_SCOPES: openid profile email
       GF_SECURITY_ADMIN_USER: admin
-      GF_SECURITY_ADMIN_PASSWORD: vert1234
+      GF_SECURITY_ADMIN_PASSWORD: vkpr1234
       GF_SECURITY_ALLOW_EMBEDDING: true
       GF_SERVER_ROOT_URL: "http://vkpr-grafana.default.svc/"
-#
-# SECURITY STACK
-#
-vault:
-  enabled: false
 
+# SECURITY STACK
 keycloak:
   enabled: true
   rbac:
@@ -142,4 +100,4 @@ keycloak:
     - name: KEYCLOAK_USER
       value: admin
     - name: KEYCLOAK_PASSWORD
-      value: vert1234
+      value: vkpr1234
