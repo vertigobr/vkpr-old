@@ -11,6 +11,7 @@ keywords:
 maintainers:
   - name: Vertigo
     email: devops@vertigo.com.br
+    url: https://vertigo.com.br
 sources:
   - https://github.com/vertigobr/vkpr
 dependencies:
