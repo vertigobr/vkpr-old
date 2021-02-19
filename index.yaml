@@ -3,6 +3,64 @@ entries:
   vkpr:
   - apiVersion: v2
     appVersion: v1.4.0
+    created: "2021-02-19T20:08:47.170874091Z"
+    dependencies:
+    - alias: nginx-ingress
+      condition: nginx-ingress.enabled
+      name: ingress-nginx
+      repository: https://kubernetes.github.io/ingress-nginx
+      version: 3.7.1
+    - condition: external-dns.enabled
+      name: external-dns
+      repository: https://charts.bitnami.com/bitnami
+      version: 3.4.9
+    - condition: loki-stack.enabled
+      name: loki-stack
+      repository: https://grafana.github.io/loki/charts
+      version: 2.0.0
+    - condition: kube-prometheus-stack.enabled
+      name: kube-prometheus-stack
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 10.3.1
+    - condition: jaeger.enabled
+      name: jaeger
+      repository: https://jaegertracing.github.io/helm-charts
+      version: 0.39.0
+    - condition: cert-manager.enabled
+      name: cert-manager
+      repository: https://charts.jetstack.io
+      version: v1.2.0
+    - condition: keycloak.enabled
+      name: keycloak
+      repository: https://codecentric.github.io/helm-charts
+      version: 9.5.0
+    - condition: vault.enabled
+      name: vault
+      repository: https://helm.releases.hashicorp.com
+      version: 0.8.0
+    - condition: velero.enabled
+      name: velero
+      repository: https://vmware-tanzu.github.io/helm-charts/
+      version: 2.13.3
+    description: VKPR Helm chart (Vertigo Kubernetes Production Runtime)
+    digest: 7ddaa04a5ab6bfb9673b973741709914395e32ffaf1b7c98d47ccaa91605043e
+    home: https://github.com/vertigobr/vkpr
+    icon: https://vertigo.com.br/wp-content/uploads/favicon.png
+    keywords:
+    - vkpr
+    - production runtime
+    maintainers:
+    - email: devops@vertigo.com.br
+      name: Vertigo
+      url: https://vertigo.com.br
+    name: vkpr
+    sources:
+    - https://github.com/vertigobr/vkpr
+    urls:
+    - https://github.com/vertigobr/vkpr/releases/download/vkpr-0.8.4/vkpr-0.8.4.tgz
+    version: 0.8.4
+  - apiVersion: v2
+    appVersion: v1.4.0
     created: "2021-01-19T12:51:09.606537026Z"
     dependencies:
     - alias: nginx-ingress
