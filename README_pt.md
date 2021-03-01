@@ -40,7 +40,7 @@ helm repo update
 helm upgrade -i -f values.yaml -n vkpr vkpr vertigo/vkpr
 ```
 
-Leia a [Documentação do VKPR](https://charts.vertigo.com.br/docs/) para estudar cenários específicos de instalação.
+Leia a [Documentação do VKPR](https://vertigobr.github.io/vkpr-docs/docs/) para estudar cenários específicos de instalação.
 
 ## Stacks
 
@@ -48,20 +48,20 @@ Leia a [Documentação do VKPR](https://charts.vertigo.com.br/docs/) para estuda
   
 O **Ingress stack** foca em produzir formas de conexão externa aos recursos dentro do cluster Kubernetes.
 
-- [NGINX Ingress Controller](https://charts.vertigo.com.br/docs/stacks#nginx-ingress-controller) é um Ingress Controller para Kubernetes que usa o NGINX como proxy reverso e balanceador de carga (*load balancer*).
-- [ExternalDNS](https://charts.vertigo.com.br/docs/stacks#externaldns) é um componente para Kubernetes que configura automaticamente serviços de DNS públicos para que serviços do cluster possam ser descobertos por nomes DNS comuns.
+- [NGINX Ingress Controller](https://vertigobr.github.io/vkpr-docs/docs/stacks#nginx-ingress-controller) é um Ingress Controller para Kubernetes que usa o NGINX como proxy reverso e balanceador de carga (*load balancer*).
+- [ExternalDNS](https://vertigobr.github.io/vkpr-docs/docs/stacks#externaldns) é um componente para Kubernetes que configura automaticamente serviços de DNS públicos para que serviços do cluster possam ser descobertos por nomes DNS comuns.
 
 ### Logging stack
 
 O **Logging Stack** cuida da coleta de logs distribuídos para posterior pesquisa.
 
-- [Loki](https://charts.vertigo.com.br/docs/stacks#loki) é um sistema de coleta e agregação de logs inspirado no Prometheus que é escalável, disponível e multi-tenant.
+- [Loki](https://vertigobr.github.io/vkpr-docs/docs/stacks#loki) é um sistema de coleta e agregação de logs inspirado no Prometheus que é escalável, disponível e multi-tenant.
 
 ### Monitoring stack
 
 O **Monitoring Stack** é dedicado à observação e coleta de métricas tanto para o cluster como para serviços e aplicações individualmente.
 
-- [Prometheus Operator](https://charts.vertigo.com.br/docs/stacks#prometheus-operator) permite instalar e gerenciar nativamente o Prometheus e seus componentes no Kubernetes. O Prometheus Operator contém os seguintes mídulos:
+- [Prometheus Operator](https://vertigobr.github.io/vkpr-docs/docs/stacks#prometheus-stack) permite instalar e gerenciar nativamente o Prometheus e seus componentes no Kubernetes. O Prometheus Operator contém os seguintes mídulos:
   - [Grafana](https://grafana.com/oss/grafana/) permite pesquisar e visualizar métricas e logs.
   - [Prometheus](https://grafana.com/oss/prometheus/) é um sistema de monitoração com um rico modelo de dados multidimensional, uma linguagem de pesquisa concisa e rica (PromQL), uma base de séries temporais eficiente, além de mais de 150 integrações com sistemas de terceiros.
   - [Alertmanager](https://prometheus.io/docs/alerting/latest/alertmanager/) lida com alertas enviados por outras aplicações (entre elas o próprio Prometheus).
@@ -70,15 +70,15 @@ O **Monitoring Stack** é dedicado à observação e coleta de métricas tanto p
 
 O **Security Stack** é focado em ferramentas de segurança que cuidam de questões onipresentes para sistemas (como gestão de identidade e segredos).
 
-- [cert-manager](https://charts.vertigo.com.br/docs/stacks#cert-manager) é um componente para Kubernetes que automatiza a gestão e emissão de certificados TLS (HTTPS) por diversos emissores externos.
-- [Vault](https://charts.vertigo.com.br/docs/stacks#vault) é uma solução que protege, armazena e restringe acesso a tokens, senhas, certificados, chaves de APIs e outros tantos elementos restritos típicos de sistemas modernos. 
-- [Keycloak](https://charts.vertigo.com.br/docs/stacks#keycloak) é uma solução de código aberto para Gestão de Identidade e Acesso útil para aplicações e serviços modernos.
+- [cert-manager](https://vertigobr.github.io/vkpr-docs/docs/stacks#cert-manager) é um componente para Kubernetes que automatiza a gestão e emissão de certificados TLS (HTTPS) por diversos emissores externos.
+- [Vault](https://vertigobr.github.io/vkpr-docs/docs/stacks#vault) é uma solução que protege, armazena e restringe acesso a tokens, senhas, certificados, chaves de APIs e outros tantos elementos restritos típicos de sistemas modernos. 
+- [Keycloak](https://vertigobr.github.io/vkpr-docs/docs/stacks#keycloak) é uma solução de código aberto para Gestão de Identidade e Acesso útil para aplicações e serviços modernos.
 
 ### Backup stack
 
 O **Backup Stack** foca em ferramentas de backup e restore que auxiliam na migração e/ou restauração de um cluster e seus volumes.
 
-- [Velero](https://charts.vertigo.com.br/docs/stacks#velero) é uma ferramenta de código aberto para backup e restore de clusters Kubernetes, sendo útil para *disaster recovery* e/ou migração de clusters e seus recursos.
+- [Velero](https://vertigobr.github.io/vkpr-docs/docs/stacks#velero) é uma ferramenta de código aberto para backup e restore de clusters Kubernetes, sendo útil para *disaster recovery* e/ou migração de clusters e seus recursos.
 
 ## Versões dos charts
 

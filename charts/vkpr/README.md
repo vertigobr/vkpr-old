@@ -16,4 +16,4 @@ helm repo update
 helm upgrade -i -f values.yaml -n vkpr vkpr vertigo/vkpr
 ```
 
-Take a look on [docs](https://charts.vertigo.com.br/docs/) to check the installation for a more specific scenario.
+Take a look on [docs](https://vertigobr.github.io/vkpr-docs/docs/) to check the installation for a more specific scenario.
