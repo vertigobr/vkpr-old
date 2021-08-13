@@ -1,9 +1,10 @@
-![](https://img.shields.io/badge/status-In%20development-yellow)
-![](https://img.shields.io/badge/license-Apache%202.0-blue)
-![Release Helm chart](https://github.com/vertigobr/vkpr/workflows/Release%20Helm%20chart/badge.svg)
+
 # VKPR - Vertigo Kubernetes Production Runtime
 
-O VKPR é inspirado no [projeto BKPR](https://github.com/bitnami/kube-prod-runtime) da Bitnami, mas é implementado puramente com Helm charts.
+
+**Este projeto está obsoleto e foi substituído pela [VKPR CLI](https://github.com/vertigobr/vkpr-cli)**
+
+O VKPR foi inspirado no [projeto BKPR](https://github.com/bitnami/kube-prod-runtime) da Bitnami, mas era implementado puramente agregando Helm subcharts. A quantidade de subcharts tornou esta abordagem impraticável, portanto partimos para a criação de uma nova CLI.
 
 [&#x1f1fa;&#x1f1f8; &#x1f1ec;&#x1f1e7; English](README.md) | [&#x1f1e7;&#x1f1f7; &#x1f1f5;&#x1f1f9; Português](README_pt.md)
 
